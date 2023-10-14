@@ -1,0 +1,123 @@
+How to work with AWS S3 buckets
+from terminal and Python
+
+================================================================
+Installing AWS CLI - just google for it.
+You will find this:
+
+ - https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+For example, for Linux:
+   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+   unzip awscliv2.zip
+   sudo ./aws/install
+   # test
+   which aws
+   aws --version
+
+Now you need to configure it using instructions here:
+ 
+ - https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html
+
+================================================================
+s4cmd (updated from s3cmd) - command to work with S3 buckets.
+You can do:
+    ls, cp, put, sync, etc. 
+
+    s4cmd ls    [path]
+    s4cmd put   [source] [target]
+    s4cmd get   [source] [target]
+    s4cmd dsync [source dir] [target dir]
+    s4cmd cp    [source] [target]
+    s4cmd mv    [source] [target]
+    s4cmd del   [path]
+    s4cmd du    [path]
+    
+    Available parameters:
+     -r - recursive
+     -F - force overwrite
+     etc.
+
+ - https://github.com/bloomreach/s4cmd
+ - https://pypi.org/project/s4cmd/
+
+To install:
+    
+    pip install s4cmd
+
+After installing s4cmd, you can run command
+with configure option to set up your credentials.
+
+   s4cmd --configure
+
+This also will allow python boto3 package 
+to run without explicitly providing keys each time.
+
+ - https://pythonrepo.com/repo/bloomreach-s4cmd-python-downloader
+
+Note:
+
+Python pandas read_csv() and to_csv() methods can handle S3 paths
+( you just include "s3://{bucket_name}/" prefix ).
+
+For this to work you need to set up boto3 and s3fs.
+Read details here:
+ - https://towardsdatascience.com/reading-and-writing-files-from-to-amazon-s3-with-pandas-ccaf90bfe86c
+
+================================================================
+(OLD) How to put file into s3 bucket:
+
+1. Use AWS CLI (Unix or PC)
+    aws s3 cp  myfile  s3://my-bucket/
+
+2. use s3fs software to mount the bucket to a file system on a Linux server
+    - https://winscp.net/eng/docs/guide_amazon_s3_sftp
+
+3. use winSCP on Windows
+    - https://winscp.net/eng/docs/guide_amazon_s3
+
+4. Use standard SSH (scp or sftp) top copy file to EC2,
+    and then use AWS CLI there
+
+5. Use 3rd party gateway:
+    Pre-configured SFTP server that reliably saves uploads to an Amazon S3 bucket
+    sold by: Thorn Technologies
+    https://aws.amazon.com/marketplace/pp/B072M8VY8M
+
+    SFTP and SCP Gateway to Amazon S3
+    Sold by: netCubed
+    https://aws.amazon.com/marketplace/pp/B0764CYKPB
+
+================================================================
+Set up AWS Credentials and Region for Development
+ - https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html): 
+
+Populate ~/.aws/credentials 
+(from ~/.s3cfg)
+
+mkdir -p ~/.aws 
+my_cred_file=~/.aws/credentials 
+cat ~/.s3cfg | awk -F= ' ($1 ~ /access_key/) { access_key = $2; } ($1 ~ /secret_key/) { secret_key = $2; } END { print "[default]"; print "aws_access_key_id ="access_key; print "aws_secret_access_key ="secret_key; } ' > $my_cred_file
+
+Region: Instead of adding ~/.aws/config 
+(https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html) 
+you can add the following to ~/.bash_profile, 
+followed by source ~/.bash_profile: 
+
+export AWS_REGION=us-west-2
+
+================================================================
+Guide to understand AWS:
+  https://github.com/open-guides/og-aws 
+
+IAM = Identity and Access Management
+(Users, Groups, Roles, Policies):
+
+ - https://medium.com/@thomas.storm/aws-iam-deep-dive-chapter-2-users-groups-roles-policies-330bfac3b505
+ - https://docs.aws.amazon.com/IAM/latest/UserGuide/id.html
+ - https://aws.amazon.com/iam/faqs/
+ - https://github.com/open-guides/og-aws#security-and-iam 
+
+ - https://miro.medium.com/max/800/0*SrFS0MqKd4zzJosK.png
+
+================================================================

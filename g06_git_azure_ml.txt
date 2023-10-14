@@ -1,0 +1,67 @@
+
+
+Login into go into DevOps,
+go to your project, create a new repository.
+
+https://dev.azure.com/YourAccount/_git/YourProject
+
+In ML Studio open terminal and do the following:
+
+cd  # to go to the home directory
+ls -alF # check that directory .ssh exists
+        # if not:  mkdir .ssh
+
+ssh-keygen -C "you@somedomain.com"
+
+    Generating public/private rsa key pair.
+    Enter file in which to save the key (.ssh/id_rsa):
+    Enter passphrase (empty for no passphrase):  <ENTER>
+    Enter same passphrase again: <ENTER>
+    Your identification has been saved in .ssh/id_rsa.
+    Your public key has been saved in .ssh/id_rsa.pub.
+    ...
+
+chmod 700 .ssh
+cd .ssh
+chmod 700 id_rsa*
+
+# both files are simple text files.
+# the one with ".pub" contains public key, the other one - private key.
+# use "cat" command to print the files in the terminal - and copy-paste
+# their contents into two text files with extensions "txt" on your desktop.
+# also copy the text of the public key - and paste it (add it) to your repository.
+# It is described here (step 2):
+.. https://docs.microsoft.com/en-us/azure/devops/repos/git/use-ssh-keys-to-authenticate?view=azure-devops#step-2--add-the-public-key-to-azure-devops-servicestfs
+
+# At the sam link go to step3: Clone the Git repository with SSH
+# Copy the link - it will look something like this
+
+    git@ssh.dev.azure.com:v3/YourAccount/YourProject/YourProject
+
+# and then in terminal run the following command:
+
+    git clone git@ssh.dev.azure.com:v3/YourAccount/YourProject/YourProject
+
+# This should create a directory "YourProject" with the .git subdirectory in it
+# Now you can move this .git to the proper location,
+# Once there run the command to check:
+
+git remote -v
+
+# Then add the .gitignore file, 
+# add dot files to make life easier
+# then commit and push the files
+
+# -------------------------------------------------------------
+# Official documentation:
+
+Git integration for Azure Machine Learning
+ 
+.. https://docs.microsoft.com/en-us/azure/machine-learning/concept-train-model-git-integration
+
+
+Step 2: Add the public key to Azure DevOps Services/TFS
+ 
+.. https://docs.microsoft.com/en-us/azure/devops/repos/git/use-ssh-keys-to-authenticate?view=azure-devops#step-2--add-the-public-key-to-azure-devops-servicestfs
+ 
+# -------------------------------------------------------------

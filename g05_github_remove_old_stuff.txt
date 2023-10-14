@@ -1,0 +1,52 @@
+GitHub - removing old files
+
+# --------------------------------------------------------------
+see instructions here to remove file from history:
+
+https://docs.github.com/en/github/authenticating-to-github/removing-sensitive-data-from-a-repository
+
+# --------------------------------------------------------------
+# I can try this to delete all history from terminal
+# --------------------------------------------------------------
+
+# ---------------------------
+# commit all the changes, make sure you are up-to-date
+gist
+gg
+
+# ---------------------------
+# make a copy of the repository (just in case)
+cd ~/Documents/GitHub
+rsync -a myrepo ./OLD/
+
+# ---------------------------
+# go into repository and run commands
+cd myrepo
+
+git checkout --orphan latest_branch
+    # Switched to a new branch 'latest_branch'
+git add -A
+git commit -am “init”                     # Committing the changes
+git branch -D master                      # Deleting master branch
+git branch -m master                      # renaming branch as master
+git push -f --set-upstream origin master  # pushes to master branch
+git gc --aggressive --prune=all # remove the old files
+
+# --------------------------------------------------------------
+# The git reflog expire command prunes all entries older than the current time 
+# while git gc removes unreachable files and recompresses the repository.
+git reflog expire --expire=now --all && git gc --prune=now --aggressive
+
+# --------------------------------------------------------------
+Create an archive of git repository
+https://riptutorial.com/git/example/9513/create-an-archive-of-git-repository
+
+Several ways of achieving this:
+
+git archive --format tar HEAD | cat > archive-HEAD.tar
+git archive --format tar HEAD | gzip > archive-HEAD.tar.gz
+git archive --format tar.gz HEAD > archive-HEAD.tar.gz
+git archive --format zip HEAD > archive-HEAD.zip
+git archive --output=archive-HEAD.tar.gz HEAD
+# --------------------------------------------------------------
+

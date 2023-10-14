@@ -1,0 +1,132 @@
+
+                
+
+
+Visual Studio Code
+ .. https://code.visualstudio.com/
+ .. https://code.visualstudio.com/docs
+
+Great free coding editor from Microsoft.
+Written in Javascript, runs using Electron platform
+ .. https://www.electronjs.org/
+
+Has very good IntelliSense (code completion, quick info, ...).
+I recently started using it for everything (python, ssh remote, SQL).
+ .. https://code.visualstudio.com/docs/python/jupyter-support-py
+ .. https://learn.microsoft.com/en-us/azure/azure-sql/database/connect-query-vscode?view=azuresql
+
+There are many good tutorials, for example:
+ .. https://www.youtube.com/watch?v=VqCgcpAypFQ
+
+I use the following extensions:
+
+=======================  
+Install following Extensions Globally:
+  Python IntelliSense (Pylance), Linting, Debugging (multi-threaded, remote), Jupyter Noteb...
+  Jupyter (Microsoft)
+    Jupyter Keymap (Microsoft)
+    Jupyter Notebook Renderers
+  Hex Editor (Microsoft)
+  Remote - SSH (Microsoft)
+  Rewrap (stkb)
+  Render Line Endings (Josip Medved)
+  Material Icon Theme
+  Pylance (Microsoft)                 
+  IntelliCode (Microsoft)
+  R Extension ... (REditorSupport)
+=======================  
+python: select interpreter
+=======================  
+remote-ssh
+
+  Edit $HOME/.ssh/config file
+  for each entry provide something like this:
+
+Host myhost
+    User myuser
+    HostName 12.34.56.78    (or ab.cd.ef.com)
+    IdentityFile /Users/levselector/.ssh/myhost/my-ssh-key.pem
+
+Host *
+  AddKeysToAgent yes
+
+Then from unix prompt you can do commands like this:
+  ssh myhost
+  scp test.py myhost:/data/
+
+  etc.
+=======================  
+Once you install extension "Remote - SSH",
+you will see a new icon at the bottom of the
+activity bar (on the left of the screen).
+It is a remote explorer.
+When you click on it - it will read SSH 
+config file and show you all your remote hosts.
+You can right-click on them - and open SSH connections.
+I usually open them do it in a separate window.
+=======================  
+Once you connected - there will be a green indicator at the left-bottom
+Then You can install Python and other extensions
+(they will go into $HOME/.vscode-server/  directory on the remote server)
+=======================
+menu help > keyboard shortcuts
+
+some shortcuts for MacOS:
+  cmd-K cmd-R - show keyboard shortcuts
+  cmd-O - open (folder, file)
+  cmd-shift-P - commands
+  ctrl-shift-` - new terminal
+  cmd-D - add selection
+  Format
+  cmd-P - navigate between files
+  ctrl-R - switch between projects
+  shift-Option-cmd and arrows - to select (columnar) blocks of text
+  Option-Q - rewrap the paragrapg or selected text
+  Option-Z - toggle auto-wrap
+=======================
+Custom settings:
+Press cmd-shift-P, search for settings, 
+  You can select settings via UI
+or select 
+  Preferences: open user settings (JSON)
+Here are my current settings:
+{
+    "editor.minimap.enabled": false,
+    "security.workspace.trust.untrustedFiles": "open",
+    "python.defaultInterpreterPath": "/Users/levselector/miniconda3/bin/python",
+    "terminal.integrated.inheritEnv": false,
+    "window.zoomLevel": 1,
+    "workbench.editor.untitled.hint": "hidden",
+    "editor.renderWhitespace": "all",
+    "workbench.colorTheme": "Default Light+",
+    "workbench.startupEditor": "none",
+    "editor.rulers": [55,80],
+    "editor.wordWrap": "on",
+    "workbench.iconTheme": "material-icon-theme",
+    "[plaintext]": {
+        "editor.unicodeHighlight.ambiguousCharacters": true,
+        "editor.unicodeHighlight.invisibleCharacters": true
+    },
+    "[markdown]": {
+        "editor.unicodeHighlight.ambiguousCharacters": true,
+        "editor.unicodeHighlight.invisibleCharacters": true
+    },
+}
+=======================
+Auto-Wrapping:
+  I set wrapping on - it wraps on the right screen Endings
+  I can toggle this auto wrapping on/off by pressing Option-Z 
+=======================
+Hard wrapping (using extension Rewrap)
+  Put cursor on line (inside paragraph)
+  and press Option-Q 
+
+Note: if wrapping doesn't work, it maybe because the 
+module tries to be smart about not-wrapping whole strings.
+(depending on language settings).
+
+A simple method to overcome this problem is to tell
+the editor that your file type is Plain Text.
+To do this click in the bottom-right of the window,
+where you can select the file type.
+=======================

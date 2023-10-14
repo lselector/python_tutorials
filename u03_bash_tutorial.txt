@@ -1,0 +1,49 @@
+search Google or YouTube for 
+
+    bash tutorial
+    bash tutorial for beginners
+    bash tutorial pdf
+
+You will find many excellent tutorials, for example:
+
+ - https://linuxconfig.org/bash-scripting-tutorial-for-beginners
+
+ - https://tldp.org/HOWTO/pdf/Bash-Prog-Intro-HOWTO.pdf
+
+ - https://www.kau.edu.sa/files/830/files/60761_linux.pdf
+
+
+I even have my own tutorials aboud old Bourne shell here:
+
+ - https://levselector.com/unix_shells.html
+
+ - https://levselector.com/unix_sh.html
+
+Videos:
+
+9 min - Vim Basics in 8 Minutes
+ - https://www.youtube.com/watch?v=ggSyF1SVFr4
+
+61 min - Vim Tutorial
+ - https://www.youtube.com/watch?v=IiwGbcd8S7I
+
+60 min - Derek Banas - Shell Scripting Tutorial - Excellent!
+ - https://www.youtube.com/watch?v=hwrnmQumtPw
+
+24 min - Bash Shell Scripting Tutorial For Beginners
+ - https://www.youtube.com/watch?v=Zl7npywCB84
+
+32 min - Shell Scripting Crash Course - Beginner Level
+ - https://www.youtube.com/watch?v=v-F3YLd6oMw
+
+
+# ------------------------------------------------------------------------------
+command to recusrively go through directory looking for files with extension "txt"
+and substitute tabs to 4 spaces
+
+fd -t f -e txt | xargs ggrep -P '\t'| awk -F ':' '{print $1}' | uniq | xargs perl -pi -e 's/\t/    /g;'
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------

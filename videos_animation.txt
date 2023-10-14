@@ -1,0 +1,184 @@
+# --------------------------------------------------------------
+How To Make Animated GIFs
+# --------------------------------------------------------------
+
+    Canva - https://www.canva.com/ 
+    Tutorial (10 min) - https://www.youtube.com/watch?v=zJSgUx5K6V0 - 
+    Tutorial (100 min) - https://www.youtube.com/watch?v=un50Bs4BvZ8 - 
+    # ---------------------------------
+    EZGIF - make GIFs from 2 or more images, or from videos
+    Tutorial - https://youtu.be/f9vhe4_MLUs - 
+      - https://ezgif.com - 
+    # ---------------------------------
+    Free animated backgrounds
+      - https://pixabay.com/videos/search/animated%20background/ - 
+    # ---------------------------------
+    Tutorial - Make Animated GIF using Microsoft PowerPoint
+      - https://youtu.be/szbFDKVHkOM - 
+    Tutorial - Create Moving Backgrounds in Microsoft PowerPoint
+      - https://www.youtube.com/watch?v=sbzFRRUFGQ4 - 
+
+# --------------------------------------------------------------
+How To Make Whiteboard Animation (of a hand drawing text or picture)
+# --------------------------------------------------------------
+    Just google for "Whiteboard Animation Software" 
+    (or doodle animation)
+
+    Note: word "doodle" means "an aimless or casual scribble, 
+    design, or sketch", "chicken scratch"
+    In Russian - "karakuli" = "scribble"
+
+    Best Whiteboard Animation Software 2021 : 
+    Top 5 Whiteboard Softwares For PC & Mac
+      - https://www.youtube.com/watch?v=ulBe-clWCdE
+
+    I was divided between two packages:
+      - DoodleMaker -  https://doodlemaker.com 
+        $49 one time + $49 for delux
+      - CreateStudio - https://createstudio.com/ 
+        $99 one time (related to VideoMakerFX  (2014-2016))
+
+# --------------------------------------------------------------
+Software I bought:
+
+    11/07/2021 - bought DoodleMaker + Delux upgrade
+                 Total: $49 + $49 (two orders)
+                 Login URL: ​http://www.doodlemakerapp.com ​
+                 https://doodlemaker.com/tutorials/
+                 support@doodlemaker.com
+    11/25/2021 - bought VideoCreator and its Delux package
+                 Total: $49 + $67 (two orders)
+                 Login URL: https://app.videocreator.io
+                 https://videocreator.io/tutorials/​
+                 support@videocreator.io
+# --------------------------------------------------------------
+
+    All packages I found:
+    •  Videoscribe - https://www.videoscribe.co/en/ - $995 one time - the best, but expensive
+    •  Doodly - https://www.doodly.com - was $67 one time, now $39/month
+    •  DoodleMaker -  https://doodlemaker.com - $49 one time + $49 for delux
+    •  VideoCreator - https://videocreator.io/live/ - $49 one time
+    •  CreateStudio - https://createstudio.com/ - $99 one time (related to VideoMakerFX  (2014-2016))
+    
+    ( Doodly vs DoodleMaker - https://www.youtube.com/watch?v=ET3aSw0F-ac )
+    ( Doodly vs Videoscribe - https://www.youtube.com/watch?v=h5GqVm5uR7M )
+    ( VideoCreator vs DoodleMaker - https://www.youtube.com/watch?v=2kCejC8MRbo )
+    
+    •  Explaindio - http://explaindio.com/v4-fe/  - $497 one time
+    •  Vyond - https://www.vyond.com/plans/ - $300/year .. $999/year
+    •  Doodleoze - https://viddyoze.com/ - $99 or $127 one time purchase
+    •  Animaker - https://www.animaker.com/
+    •  Animatron - https://www.animatron.com/
+    •  Renderforest - https://www.renderforest.com/
+    •  Mysimpleshow - https://videomaker.simpleshow.com/
+    •  Rawshorts - https://www.rawshorts.com/
+    •  Powtoon - https://www.powtoon.com/
+    •  Viddyoze - https://viddyoze.com/
+    •  Digital Juice - https://www.digitaljuice.com/ 
+    •  TruScribe - https://truscribe.com/
+    •  EasySketchPro - https://easysketchpro.com/
+    •  Bitable - https://biteable.com/
+
+# --------------------------------------------------------------
+Handwriting Text Effect In PowerPoint 2010 
+( 2 Ways To Create A Handwriting Effect In PowerPoint ) 
+  - https://www.youtube.com/watch?v=HJVGl_bDOOw
+
+PowerPoint Animation Tutorial - Learn How To Animate
+ - https://www.youtube.com/watch?v=3uJd-_JpG1w
+# --------------------------------------------------------------
+More Resources for Animations/GIFs
+
+GIFs:
+    Movavi Video Converter
+    Simply create GIFs from a video by importing and cutting
+    Variety of simple editing 
+    Makeagif.com
+    EZGIF.com
+    Imgflip.com
+    Make GIFs from pictures
+    Picasion.com
+
+Animations:
+    OpenToonz
+    Blender (good for 3D)
+    Sozi
+    Krita
+    Pencil2D
+
+LinkedIn:
+    Size has to be exactly 1280x720
+    Use giphy.com and use stickers
+
+
+Resources:
+    How to Create Animated Infographics 
+    Five Types of Animations For Infographics
+      .. https://www.youtube.com/watch?v=k4dEKe6OMWw
+
+    How to Create GIFs in 3 Easy Ways
+      .. https://www.youtube.com/watch?v=ccA2jx3wJIc
+ 
+    Animated GIFs on LinkedIn - How to Stand out on LinkedIn 
+    With Animated LinkedIn Article Cover Images
+      .. https://www.youtube.com/watch?v=mffVD9JIl3g
+# --------------------------------------------------------------
+Often it is easier to find animation on Google.
+Just search for
+    topic1 animated gif
+    topic2 animated gif
+
+# --------------------------------------------------------------
+Video Editors:
+I am using OpenShot - Free, Open Source - Mac, Windows, Linux
+- OpenShot: https://www.openshot.org/ 
+
+Other:
+- Windows 10 Free Video Editor: https://youtu.be/t6yQwLuoO3w
+- iMovie: https://www.apple.com/imovie/ - Free, Mac Only
+
+- VN Video Editor (VN = VlogNow) - Free, iPhone, iPad, Android (also Mac and Windows)
+- CapCut: https://www.capcut.com/ - Free, Mac, PC, iPhone, Android
+  (great for vertical phone video)
+
+- ShotCut: https://www.shotcut.org/ - Free
+
+- Kdenlive: https://kdenlive.org/en/ - Free, Open Source - Mac, Windows, Linux
+  (more professional and complicated than OpenShot)
+
+- DaVinci Resolve: https://www.blackmagicdesign.com/products/davinciresolve
+  professional level for free 
+  (also paid version for advanced options)
+
+- VSDC Editor: http://www.videosoftdev.com/ - Free
+- HitFilm Express: https://fxhome.com/product/hitfilm - Free
+- VideoPad: https://www.nchsoftware.com/videopad/ - Free, Mac only
+
+- Final Cut Pro - $300, Mac only
+- Adobe Premiere Elements - one time fee $100, Windows & MAC
+
+TUTORIALS ON VIDEO EDITING SOFTWARE
+- OpenShot: https://youtu.be/rLWXlc1BW-I
+- Shotcut: https://youtu.be/PCMcyYAtRzw
+- DaVinci Resolve: https://youtu.be/UguJiz9AYM8
+
+# --------------------------------------------------------------
+
+About OpenShot video editor:
+# --------------------------------------------------------------
+  https://www.openshot.org/
+  https://www.openshot.org/user-guide/
+OpenShot Video Editing Beginner Tutorial (6min)
+  https://www.youtube.com/watch?v=0a_B4LxTy3Y
+OpenShot Video Editor 2018 Tutorial - Designed for Beginners (30min)
+  https://www.youtube.com/watch?v=l_r12b99TIg
+OpenShot Tutorials (7 10-min videos)
+  https://www.youtube.com/playlist?list=PLymupH2aoNQNezYzv2lhSwvoyZgLp1Q0T
+OPENSHOT TUTORIAL: Keyframes, Transitions
+  https://www.youtube.com/watch?v=mgi4esWA84M
+OpenShot: How To Apply Transitions Across Video Clips.
+  https://www.youtube.com/watch?v=8r1CNq3KMOg
+How To Zoom in OpenShot | Keyframe, Animation & Ease in/out Tutorial
+  https://www.youtube.com/watch?v=nEyrC1v-M1s
+# --------------------------------------------------------------
+

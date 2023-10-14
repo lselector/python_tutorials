@@ -1,0 +1,599 @@
+/************************************************
+
+Modified from the excellent tutorial by Derek Banas (47 min video):
+
+ - https://www.youtube.com/watch?v=U1EFgCNLDB8
+
+Install Rust:
+
+MacOS: run this command in a terminal:
+
+  curl https://sh.rustup.rs -sSf | sh
+
+This will download and install the official compiler for the Rust
+programming language, and its package manager, Cargo.
+
+Important files:
+    ~/.rustup  # RUSTUP_HOME env. variable
+    ~/.cargo   # CARGO_HOME  env. variable
+    ~/.cargo/bin # cargo, rustc, rustup, etc.
+
+This path will then be added to PATH in:
+  ~/.profile
+  ~/.bash_profile
+  ~/.bashrc
+  ~/.zshenv
+
+which rustc
+rustc --version
+
+Install using an installer for Windows
+https://www.rust-lang.org/downloads.html
+
+Type the following to verify install rustc --version
+
+Install Rust support in Atom
+Packages -> Command Palette -> Toggle
+Type install -> Install Packages and Themes
+atom-language-rust -> Click Install
+
+Compile: 
+  rustc rusttut.rs -A warnings
+Run:
+  ./rusttut # or rusttut.exe on Windows
+************************************************/
+
+fn main() {
+    println!("Hello World")  //  exclamation means it is a macro
+}
+
+# compile
+rustc test.rs -A warnings
+
+#run
+./test
+
+# --------------------------------------------------------------
+// Import data types for testing
+use std::{i8, i16, i32, i64, u8, u16, u32, u64, isize, usize, f32, f64};
+
+use std::io::stdin;
+
+// The main function executes when you run the program
+fn main() {
+
+    // This macro prints to the screen
+    println!("Hello World");
+
+    // let defines a variable
+    // The data type will be guessed if not provided
+    // Variable values are immutable (Can't change)
+    let num = 10;
+
+    // Define a 32 bit mutable integer
+    let mut age: i32 = 40;
+
+    // There are many number types i8, i16, i32,
+    // i64, u8, u16, u32, u64, isize, usize, f32, f64
+
+    println!("Max i8 {}", i8::MAX);
+    println!("Min i8 {}", i8::MIN);
+    println!("Max i16 {}", i16::MAX);
+    println!("Min i16 {}", i16::MIN);
+    println!("Max i32 {}", i32::MAX);
+    println!("Min i32 {}", i32::MIN);
+    println!("Max i64 {}", i64::MAX);
+    println!("Min i64 {}", i64::MIN);
+    println!("Max isize {}", isize::MAX);
+    println!("Min isize {}", isize::MIN);
+    println!("Max usize {}", usize::MAX);
+    println!("Min usize {}", usize::MIN);
+    println!("Max f32 {}", f32::MAX);
+    println!("Min f32 {}", f32::MIN);
+    println!("Max f64 {}", f64::MAX);
+    println!("Min f64 {}", f64::MIN);
+
+    // There are booleans
+    let is_it_true: bool = true;
+
+    // Characters
+    let let_x: char = 'x';
+
+    // Place variable values in output
+    println!("I am {} years old", age);
+
+    // You can define multiple variables
+    let (f_name, l_name) = ("Derek", "Banas");
+
+    // ---------- OUTPUT ----------
+
+    // You can place data multiple times
+    println!("It is {0} that {1} is {0}",
+    is_it_true, let_x);
+
+    // Format output
+    println!("{:.2}", 1.234);
+    println!("B: {:b} H: {:x} O: {:o}", 10, 10, 10);
+
+    // Use named arguments
+    // Define whitespace before data
+    println!("{ten:>ws$}", ten=10, ws=5);
+
+    // Pad output with zeros
+    println!("{ten:>0ws$}", ten=10, ws=5);
+
+    // ---------- MATH ----------
+    println!("5 + 4 = {}", 5 + 4);
+    println!("5 - 4 = {}", 5 - 4);
+    println!("5 * 4 = {}", 5 * 4);
+    println!("5 / 4 = {}", 5 / 4);
+    println!("5 % 4 = {}", 5 % 4);
+
+    let mut neg_4 = -4i32;
+
+    println!("abs(-4) = {}", neg_4.abs());
+    println!("4 ^ 6 = {}", 4i32.pow(6));
+    println!("sqrt 9 = {}", 9f64.sqrt());
+    println!("cbrt 9 = {}", 27f64.cbrt());
+    println!("Round 1.45 = {}", 1.45f64.round());
+    println!("Floor 1.45 = {}", 1.45f64.floor());
+    println!("Ceiling 1.45 = {}", 1.45f64.ceil());
+    println!("e ^ 2 = {}", 2f64.exp());
+    println!("log(2) = {}", 2f64.ln());
+    println!("log10(2) = {}", 2f64.log10());
+    println!("90 to Radians = {}", 90f64.to_radians());
+    println!("PI to Degrees = {}", 3.14f64.to_degrees());
+    println!("Max 4, 5 = {}", 4f64.max(5f64));
+    println!("Min 4, 5 = {}", 4f64.min(5f64));
+
+    // sin, cos, tan, asin, acos, atan, atan2, sinh,
+    // cosh, tanh
+    println!("Sin 3.14 = {}", 3.14f64.sin());
+
+    // ---------- CONDITIONALS ----------
+    //
+
+    let age_old = 6;
+
+    if (age_old == 5) {
+        println!("Go to kindergarten");
+    } else if (age_old > 5) && (age_old <= 18){
+        println!("Go to grade {}", (age_old - 5));
+    } else if (age_old <= 25) && (age_old > 18) {
+        println!("Go to college");
+    } else {
+        println!("Do what you want");
+    }
+
+    println!("!true = {}", !true);
+    println!("true || false = {}", true || false);
+    println!("true != false : {}", (true != false));
+
+    // Ternary operator
+    let can_vote = if (age_old >= 18) {true} else {false};
+    println!("Can Vote : {}", can_vote);
+
+    // ---------- LOOPING ----------
+    let mut x = 1;
+
+    loop {
+        // If even print number
+        if((x % 2) == 0) {
+            println!("{}", x);
+            x += 1;
+
+            // Jump back to the beginning of the loop
+            continue;
+        }
+        if(x > 10){
+
+            // Jump out of the loop
+            break;
+        }
+        x += 1;
+        continue;
+
+    }
+
+    let mut y = 1;
+
+    while y <= 10 {
+        println!("WHILE : {}", y);
+        y += 1;
+    }
+
+    for z in 1..10 {
+        println!("FOR : {}", z);
+    }
+
+    // ---------- STRINGS ----------
+    let rand_string = "I am a random string";
+
+    // String length
+    println!("Length : {}", rand_string.len());
+
+    // Split a string in half at index
+    let (first, second) = rand_string.split_at(6);
+    println!("First : {} Second : {}", first, second);
+
+    // Return an iterator for the string
+    let count = rand_string.chars().count();
+    let mut chars = rand_string.chars();
+
+    let mut indiv_char = chars.next();
+
+    loop {
+        // Pattern match like switch
+        match indiv_char {
+
+            // If show print
+            Some(x) => println!("{}", x),
+
+            // If None break
+            None => break,
+        }
+        indiv_char = chars.next();
+    }
+
+    // Split on whitespace
+    let mut iter = rand_string.split_whitespace();
+
+    let mut indiv_word = iter.next();
+
+    loop {
+        match indiv_word {
+            Some(x) => println!("{}", x),
+            None => break,
+        }
+        indiv_word = iter.next();
+    }
+
+    // Iterate over lines of string
+    let rand_string2 = "I am a random string\nThere are other strings like it\nThis string is the best";
+
+    let mut lines = rand_string2.lines();
+
+    let mut indiv_line = lines.next();
+
+    loop {
+        match indiv_line {
+            Some(x) => println!("{}", x),
+            None => break,
+        }
+        indiv_line = lines.next();
+    }
+
+    // Find string in string
+    println!("Find Best : {}", rand_string2.contains("best"));
+
+
+    // ---------- INPUT ----------
+    // Define the name for the outer loop
+    'outer: loop {
+
+        // Define our lucky number
+        let number: i32 = 10;
+        println!("Pick a Number");
+
+        loop {
+
+            // Create our string
+            let mut line = String::new();
+
+            // Pass the reference where we store the string
+            // entered on the keyboard
+            let input = stdin().read_line(&mut line);
+
+            // An Option value is either Some with a value or None
+            // ok() means that the reader is at the end of the line
+            // map_or() applies a default value, or
+            // applies functions to the value
+            // trim() removes the newline
+            // parse converts the string to a i32
+            let guess: Option<i32> = input.ok().map_or(None, |_| line.trim().parse().ok());
+
+            match guess {
+                None => println!("Enter a Number"),
+                Some(n) if n == number => {
+                    println!("You Guessed It");
+                    break 'outer;
+                }
+                Some(n) if n < number => println!("Too Low"),
+                Some(n) if n > number => println!("Too High"),
+                Some(_) => println!("Error")
+            }
+        }
+    }
+
+    // ---------- ARRAYS ----------
+    // Arrays are fixed sized lists of the same type
+    let rand_array = [1,2,3];
+
+    // Get array by index
+    println!("{}", rand_array[0]);
+
+    // Get array length
+    println!("{}", rand_array.len());
+
+    // Slice an array by using a reference to it
+    // :? formats the printing of the array
+    println!("Second 2 : {:?}", &rand_array[1..3]);
+
+    // ---------- VECTORS ----------
+    // Vectors can grow unlike arrays
+
+    let mut vect1 = vec![1,2,3,4,5];
+
+    // Get an index
+    println!("Item 2 : {}", vect1[1]);
+
+    // Iterate through Vectors
+    for i in &vect1 {
+        println!("Vect : {}", i);
+    }
+
+    // Push item on
+    vect1.push(6);
+
+    // Pop item off
+    vect1.pop();
+
+    // ---------- TUPLES ----------
+    // Tuples are fixed sized lists of many types
+    let rand_tuple = ("Derek", 40);
+
+    // You can also define the data types
+    let rand_tuple_2: (&str, i8) = ("Derek", 40);
+
+    // Get value by index
+    println!("Name : {}", rand_tuple_2.0);
+
+    // ---------- FUNCTIONS ----------
+
+fn say_hello(name: &str){
+    println!("Hello {}", name);
+}
+
+fn get_sum(num1: i32, num2: i32) -> i32 {
+    num1 + num2
+}
+
+
+    say_hello("Derek");
+
+    println!("5 + 4 = {}", get_sum(5,4));
+
+    // We can create a binding to a function
+    let sum = get_sum;
+    println!("6 + 4 = {}", sum(6,4));
+
+    // ---------- CLOSURES ----------
+    // Closures represent blocks of code and can
+    // except parameters and be passed to functions
+
+    let sum_nums = |x: i32, y: i32| x + y;
+    println!("7 + 8 = {}", sum_nums(7,8));
+
+    // We can access variables outside the closure
+    let num_ten = 10;
+    let add_10 = |x: i32| x + num_ten;
+    println!("5 + 10 = {}", add_10(5));
+
+    // ---------- OWNERSHIP / POINTERS ----------
+    // There is only one binding for each resource
+    // so if you assign data to another variable
+    // the original can't access the data
+    let vect1 = vec![1, 2, 3];
+    let vect2 = vect1;
+    // error: use of moved value: `vect1`
+    // println!("vect1[0] : {}", vect1[0]);
+
+    // Primitive types can however copy values
+    let prim_val = 1;
+    let prim_val2 = prim_val;
+    println!("prim_val : {}", prim_val);
+
+    // Throws an error because you can't copy
+    // the vector
+    // println!("Sum of Vect : {}", sum_vects(vect2));
+    // println!("Vect : {:?}", vect2);
+
+    // If we pass a reference we avoid the error
+    println!("Sum of Vect : {}", sum_vects(&vect2));
+    println!("Vect : {:?}", vect2);
+
+    // ---------- STRUCTS ----------
+    // Create a mutable circle
+    let mut circle1 = Circle {
+        x: 10.0, y: 10.0, radius: 10.0};
+
+    // Get Circle values
+    println!("X : {} Y : {} R : {}",
+     circle1.x, circle1.y, circle1.radius);
+
+     // Define a function to operate on the struct
+     println!("Circle Radius : {}", get_radius(&circle1));
+
+     // It is recommended to create struct methods with impl
+     println!("Circle X : {}", circle1.get_x());
+
+     // ---------- TRAITS ----------
+     // Defines functionality that a type provides
+
+     println!("Circle Area : {}", circle1.area());
+
+     let mut rect1 = Rectangle {
+         height: 10.0, width: 10.0};
+
+     println!("Rect Area : {}", rect1.area());
+
+
+     // ---------- ENUMS ----------
+
+     let hulk = Hero::Strong(100);
+     let quicksilver = Hero::Fast;
+
+     // to_owned() converts a string literal into
+     // a String
+     let spiderman = Hero::Info {name: "Spiderman".to_owned(),
+        secret: "Peter Parker".to_owned()};
+
+    get_info(hulk);
+    get_info(spiderman);
+
+} // ---------- END OF MAIN ----------
+
+// ---------- STRUCTS ----------
+// Structs are used to create custom data types
+// Let's define a circle
+struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+fn get_radius(circle: &Circle) -> f64 {
+    circle.radius
+}
+
+// It is recommended to define struct methods with impl
+impl Circle {
+    pub fn get_x(&self) -> f64 {
+        self.x
+    }
+}
+
+// ---------- TRAITS ----------
+// Defines functionality that a type provides
+// If we want to access the y value from 2 Structs
+// we could create 2 functions or create a trait
+
+struct Rectangle {
+    height: f64,
+    width: f64,
+}
+
+// Define the trait which is like an interface
+trait HasArea {
+    fn area(&self) -> f64;
+}
+
+// Now we can implement the HasY interface for both structs
+impl HasArea for Circle {
+    fn area(&self) -> f64 {
+        3.14159 * (self.radius * self.radius)
+    }
+}
+
+impl HasArea for Rectangle {
+    fn area(&self) -> f64 {
+        self.height * self.width
+    }
+}
+
+// ---------- ENUMS ----------
+// An enum can have 1 of several values
+enum Hero {
+    Fast,
+    Strong(i32),
+    Info {name: String, secret: String}
+}
+
+// Receives enum
+fn get_info(h: Hero){
+    match h {
+        Hero::Fast => println!("Fast"),
+        Hero::Strong(i) => println!("Lifts {} tons", i),
+        Hero::Info {name, secret} => {
+            println!("{} is {}", name, secret);
+        },
+    }
+}
+
+// ---------- FUNCTIONS ----------
+// You define functions with fn, attributes and
+// attribute data types
+// & means we are borrowing the value passed
+fn say_hello(name: &str){
+    println!("Hello {}", name);
+}
+
+// Receives 2 values and returns 1
+fn get_sum(num1: i32, num2: i32) -> i32 {
+
+    // Value returned
+    // You can also use return VALUE;
+    num1 + num2
+}
+
+// ---------- OWNERSHIP / POINTERS ----------
+
+fn sum_vects(v1: &Vec<i32>) -> i32 {
+
+    // Fold is a iterator adapter that applies
+    // a function to all values
+    // Takes initial value and a closure which
+    // receives an accumulator and an element
+    let sum = v1.iter().fold(0,
+        |mut sum, &x| {sum += x; sum});
+
+    return sum;
+}
+
+// -------------- HashMap --------------
+
+use std::collections::HashMap;
+
+fn main() {
+
+    let mut mydict = HashMap::new();
+    // all keys should have the same type
+    // all values should have the same type
+    mydict.insert("k1", 55);
+    mydict.insert("k2", 94);
+    mydict.insert("k3", 75);
+    mydict.insert("k4", 45);
+
+    println!("Length of HashMap: {}", mydict.len());
+
+    match mydict.get("k2") {
+        Some(kk) => println!("Found {}", kk),
+        None     => println!("Didn't found {}","k2"),
+    }
+
+    mydict.remove("k2");
+
+    for (kk,vv) in &mydict {
+        println!(" {} => {}", kk,vv);
+    }
+
+    println!(" {} ", mydict.contains_key("k1"));
+    println!(" {} ", mydict.contains_key("k2"));
+
+}
+
+# --------------------------------------------------------------
+// Scoping Rules
+// https://doc.rust-lang.org/rust-by-example/scope.html
+
+# ----------------------------------------------
+ RAII (Resource Acquisition Is Initialization)
+# ----------------------------------------------
+Ownership and moves - Mutabiltiy, Partial Moves
+
+# ----------------------------------------------
+Borrowing - Mutability, Aliasing, The ref pattern
+
+# ----------------------------------------------
+15.4. Lifetimes
+15.4.1. Explicit annotation
+15.4.2. Functions
+15.4.3. Methods
+15.4.4. Structs
+15.4.5. Traits
+15.4.6. Bounds
+15.4.7. Coercion
+15.4.8. Static
+15.4.9. Elision
+# --------------------------------------------------------------
+# --------------------------------------------------------------

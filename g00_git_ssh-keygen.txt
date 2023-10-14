@@ -1,0 +1,90 @@
+How to Set up SSH to work with GitHub
+# --------------------------------------------------------------
+Note - in 2021 GitHub switched their authentication rules.
+
+Now you should use SSH.
+
+You can add SSH key to your account or to a specific repository
+(may be to a repo which is not yours, but you have access).
+
+# --------------------------------------------------------------
+Here how to add to your account
+
+https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+
+The link above provide instructions for Mac, Windows, and Linux.
+They have some minor differences.
+On Mac and Linux you use terminal.
+On Windows you use Git Bash terminal.
+
+Below is how to do it on a Mac:
+
+ssh-keygen -t ed25519 -C "your_email@example.com"
+
+/Users/you/.ssh/github_myname/id_ed25519_github
+
+# Start the ssh-agent in the background 
+# and set env vars SSH_AUTH_SOCK, SSH_AGENT_PID to point to it
+eval "$(ssh-agent -s)"
+
+# add your key to the agent
+ssh-add  ~/.ssh/github_myname/id_ed25519_github
+
+create/edit file     ~/.ssh/config
+
+Host *
+  AddKeysToAgent yes
+
+Host github.com
+  User myuser
+  HostName github.com
+  IdentityFile ~/.ssh/github_myname/id_ed25519_github
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519_github
+
+# -------------------------------------
+# Then copy/paste public key into Github website:
+
+https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
+
+# -------------------------------------
+# Then switch the remote locally:
+
+cd your_local_repo_dir
+git remote set-url origin git@github.com:YouUser/YouRepo.git
+
+git remote -v
+origin  git@github.com:YouUser/YouRepo.git (fetch)
+origin  git@github.com:YouUser/YouRepo.git (push)
+
+# -------------------------------------
+Note: to add a new key to a company's private repo,
+follow instructions here:
+  https://cloud.redhat.com/blog/private-git-repositories-part-2a-repository-ssh-keys
+
+Basically you need to generate the key pair 
+
+   ssh-keygen -t ed25519 -C "first.last@gmail.com"
+
+For example, you created these two keys:
+
+    $HOME/.ssh/github_myproject/github_id_ed25519
+    $HOME/.ssh/github_myproject/github_id_ed25519.pub
+
+Then you update the .ssh/config file:
+
+Host github.com
+  User githubuser
+  HostName github.com
+  IdentityFile /home/azureuser/.ssh/github_myproject/github_id_ed25519
+  IdentitiesOnly yes
+
+Host *
+  AddKeysToAgent yes
+
+Then login in github, go to the repo, click on settings (gear),
+then on the left click on "Deploy keys", 
+and the on right-top click on "Add deploy key"
+then follow instructions to paste the public key.
+# -------------------------------------
+

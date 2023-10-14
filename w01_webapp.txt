@@ -1,0 +1,286 @@
+How to configure webapp using nginx, gunicorn and flask
+
+We use ubuntu Linux
+
+install anaconda python
+
+check that flask and gunicorn modules are installed.
+If not - install them
+
+# ----------------------------------------------
+install nginx web server
+  https://mediatemple.net/community/products/developer/204405534/install-nginx-on-ubuntu
+   
+   sudo apt-get install nginx
+   sudo /etc/init.d/nginx start
+
+test:
+   sudo nginx -t
+restart:
+   sudo /etc/init.d/nginx restart
+   or
+   sudo systemctl restart nginx
+# ----------------------------------------------
+Add new site
+ - http://www.servermom.org/how-to-add-new-site-into-your-nginx-based-ubuntu-server/
+
+add default html page:
+  sudo mkdir -p /var/www/serverdomain.com/htdocs/
+  sudo mkdir -p /var/www/serverdomain.com/logs/
+  sudo chmod 755 /var/www
+  cd /var/www
+  sudo chown -R ubuntu:ubuntu serverdomain.com/ 
+  sudo chown -R ubuntu:ubuntu html/
+  cd /var/www/serverdomain.com/htdocs/
+  vi /var/www/serverdomain.com/htdocs/index.html
+# ----------------------------------------------
+cd /etc/nginx/sites-available/
+sudo cp default myapp1
+sudo vi myapp1
+
+server {
+        listen 443 ssl default_server;
+        listen [::]:443 ssl default_server;
+
+        server_name serverdomain.com ;
+        root /var/www/serverdomain.com/htdocs/ ;
+        index index.html index.htm index.nginx-debian.html ;
+
+        ssl_certificate /etc/letsencrypt/live/serverdomain.com/fullchain.pem; # managed by Certbot
+        ssl_certificate_key /etc/letsencrypt/live/serverdomain.com/privkey.pem; # managed by Certbot
+
+        access_log  /var/www/serverdomain.com/logs/access.log ;
+        error_log   /var/www/serverdomain.com/logs/error.log ;
+
+        location /prod {
+            proxy_pass http://127.0.0.1:8000;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_read_timeout 240s;
+        }
+
+        location /test {
+            proxy_pass http://127.0.0.1:8010;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_read_timeout 240s;
+        }
+}
+
+server {
+            listen 80;
+            listen [::]:80;
+
+            server_name serverdomain.com ;
+
+            return 301 https://$server_name$request_uri;
+}
+
+
+
+# ----------------------------------------------
+cd /etc/nginx/sites-enabled/
+sudo rm default
+sudo ln -s /etc/nginx/sites-available/myapp1 default
+sudo ln -s /etc/nginx/sites-available/myapp1 default
+
+sudo /etc/init.d/nginx restart
+
+# ----------------------------------------------
+Now working with gunicorn app server:
+
+when it is all configured, we can do:
+    sudo /etc/init.d/gnu_unicorn restart
+
+    log files:
+       /home/ubuntu/vdata/log_prod/gunicorn_prod.log
+       /home/ubuntu/vdata/log_test/gunicorn_test.log
+
+URLs:
+   https://serverdomain.com/prod
+   https://serverdomain.com/test
+# ----------------------------------------------
+
+gunicorn installation and configuration:
+
+ - https://www.airpair.com/python/posts/python-servers
+ - https://gunicorn.org/
+
+conda install gunicorn
+
+cd ~/vcode
+mkdir webapp_test
+cd webapp_test
+vi myapp.py
+
+def app(environ, start_response):
+    data = b"Hello, World!\n"
+    start_response("200 OK", [
+        ("Content-Type", "text/plain"),
+        ("Content-Length", str(len(data)))
+    ])
+    return iter([data])
+
+vi gunicorn_test.cfg
+
+import multiprocessing
+
+bind = "127.0.0.1:8010"
+workers = 4
+reload = True
+
+cd ~/vcode
+mkdir webapp_prod
+cd webapp_prod
+cp ../webapp_test/myapp.py ./
+vi gunicorn_prod.cfg
+
+import multiprocessing
+
+bind = "127.0.0.1:8000"
+workers = 8
+reload = True
+
+# ----------------------------------------------
+The example above was for using pure gunicorn (without Flask).
+When you use gunicorn as is, you have to parse the 
+http request yourself.
+
+It is better to use Flask which will do the parsing
+of request, handle cookies, do url mapping for you.
+
+To do this you can change your myapp.py as following:
+
+# -----------------------------
+import os, sys
+from flaskapp import app  # flaskapp is your Flask code
+
+if __name__ == "__main__":
+    if os.path.exists("gunicorn_prod.cfg.py"):
+        myport=8000
+    elif os.path.exists("gunicorn_test.cfg.py"):
+        myport=8010
+    else:
+        print("Need gunicorn_prod.cfg.py  OR  gunicorn_test.cfg.py file")
+        print("Exiting ...")
+        sys.exit(1)
+    app.run(host="localhost", port=myport, debug=True)
+# -----------------------------
+
+And then in flaskapp.py yo do the following:
+# -----------------------------
+import os, sys
+from flask import Flask
+
+app = Flask(__name__)
+
+# --------------------------------------------------------------
+if os.path.exists("gunicorn_prod.cfg.py"):
+    myport=8000
+    myenv='prod'
+    bgcolor='ffffff'
+elif os.path.exists("gunicorn_test.cfg.py"):
+    myport=8010
+    myenv='test'
+    bgcolor='00ffff'
+else:
+    print("Need gunicorn_prod.cfg.py  OR  gunicorn_test.cfg.py file")
+    print("Exiting ...")
+    sys.exit(1)
+
+# and then conventional procedures as in any Flask app
+
+@app.route(...)
+def ...():
+    pass
+
+...
+# -----------------------------
+
+# ----------------------------------------------
+
+Here is a command to see the active listening internet connections:
+
+    sudo netstat -plnt
+
+# ----------------------------------------------
+Configure gunicorn to restart on reboot
+
+sudo vi /etc/init.d/gnu_unicorn_test
+...
+sudo vi /etc/init.d/gnu_unicorn_prod
+...
+
+Note - the scripts are stored separately
+
+# ------------------------------------
+Then run the following command :
+
+sudo update-rc.d gnu_unicorn_test defaults
+sudo update-rc.d gnu_unicorn_prod defaults
+
+Then reboot:
+
+sudo reboot
+
+check that gunicorn has started in syslog:
+
+grep gunicorn /var/log/syslog 
+
+check that it is running:
+
+ps auxww | grep gunicorn
+
+# ----------------------------------------------
+
+functions to restart separately test or prod app server:
+(added into ~/.bashrc)
+
+gt_restart() {
+  ps auxww | grep gunicorn_test | grep -v grep | awk '{ print $2 }' | xargs sudo kill
+  cd /home/ubuntu/vcode/webapp_test
+  nohup gunicorn -c gunicorn_test.cfg myapp:app &
+}
+
+gp_restart() {
+  ps auxww | grep gunicorn_prod | grep -v grep | awk '{ print $2 }' | xargs sudo kill
+  cd /home/ubuntu/vcode/webapp_prod
+  nohup gunicorn -c gunicorn_prod.cfg myapp:app &
+}
+
+# ----------------------------------------------
+We will be sending JSON_request via https POST
+and getting back JSON_response. 
+We use app "Postman" for that - https://www.getpostman.com/
+Or you can use VSCode
+
+JSON_request and JSON_response should contain 
+(security) token as one of the fields.
+
+The algorithm on the cloud should:
+  check the token
+  get model prediction value
+  reply - including token, same unique_id, etc.
+
+# ----------------------------------------------
+There are several ways to run multiple apps/environments.
+here are some links:
+
+https://scottlinux.com/2014/04/03/how-to-host-multiple-django-or-python-apps-on-the-same-host-with-nginx-and-gunicorn/
+
+https://stackoverflow.com/questions/35320674/how-can-i-have-same-rule-for-two-locations-in-nginx-config
+
+https://www.thegeekstuff.com/2017/05/nginx-location-examples/
+
+
+Here are some more links:
+
+https://github.com/benoitc/gunicorn/blob/master/examples/multiapp.py
+
+http://flask.pocoo.org/docs/0.12/patterns/appdispatch/
+
+https://www.reddit.com/r/flask/comments/5vkc9t/ask_flask_how_to_deploy_multiple_apps_on_a_single/
+
+# ----------------------------------------------
+
+
