@@ -41,6 +41,19 @@ Workers & Pages - select "Pages" and create a new "myname"
     upload your files (whole directory) - and deploy
     set custom domain (myname.com)
 go to website DNS - and add CNAME   www   myname.com
+But CNAME doesn't work - so I have to make a redirect rule
+   select the website, click on DNS on left,
+   then lower on left you will see "Rules"
+   Click on "Rules, then on "Redirect Rules"
+   Then create a "Redirect Rule" as following:
+
+   rule name: "www-redirect"
+   custom filter expression
+   when hostname equals www.myname.com
+   then
+   dynamic  concat("https://myname.com", http.request.uri.path)   301
+
+   deploy
 ======================================================
 Problems - search https://community.cloudflare.com
 ======================================================
