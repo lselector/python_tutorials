@@ -175,13 +175,13 @@ Here is a list of basic unix/bash commands that you should understand
     wget
 
 # --------------------------------------------------------------
-    rsync test1.py test2.py 
-    rsync -avzh test1.py test2.py 
-    rsync -avzh myfile mydir/
-    rsync -avzh mydir mydir2/    # mydir2/mydir/
-    rsync -avzh mydir/ mydir2/   # copies content from mydir to mydir2
-    rsync -avzh mydir/ mydir2    # this is counterintuitive. 
-                                 # It creates mydir2 as recursive copy of mydir
+    rsync test1.py test2.py         # copy file
+    rsync -avzh test1.py test2.py   # copy file preserving attributes
+    rsync -avzh myfile mydir/       # copy file into directory
+    rsync -avzh mydir mydir2        # copy directory into directory:  mydir2/mydir/
+    rsync -avzh mydir mydir2/       # copy directory into directory:  mydir2/mydir/
+    rsync -avzh mydir/ mydir2/      # copies content from mydir to mydir2
+    rsync -avzh mydir/ mydir2       # copies content from mydir to mydir2
 
     rsync -avzh --exclude 'somedir1/*.csv'  \
                 --exclude '*/__pycache_*'  \
