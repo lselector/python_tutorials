@@ -175,13 +175,26 @@ Here is a list of basic unix/bash commands that you should understand
     wget
 
 # --------------------------------------------------------------
-    rsync test1.py test2.py         # copy file
+#   rsync - copies files and directories from source to destination
+#            only if there are new or changed files at source.
+#            Note - it will NOT delete the files at destination 
+#            (use --delete option if needed).
+#
+#   Examples syncing file(s):
+
+    # copy file(s)
+    rsync test1.py test2.py         # copy file (test2.py will be created or updated)
     rsync -avzh test1.py test2.py   # copy file preserving attributes
-    rsync -avzh myfile mydir/       # copy file into directory
-    rsync -avzh mydir mydir2        # copy directory into directory:  mydir2/mydir/
-    rsync -avzh mydir mydir2/       # copy directory into directory:  mydir2/mydir/
-    rsync -avzh mydir/ mydir2/      # copies content from mydir to mydir2
+    rsync -avzh test1.py mydir/     # copy file into directory (mydir will be created or updated)
+    rsync -avzh *.py     mydir/     # copy all python files into directory (and create it if needed)
+
+    # copy directory
+    rsync -avzh mydir mydir2        # copies directory. Creates mydir2 if needed. Result: mydir2/mydir
+    rsync -avzh mydir mydir2/       # same
+    
+    # copy contents of directory
     rsync -avzh mydir/ mydir2       # copies content from mydir to mydir2
+    rsync -avzh mydir/ mydir2/      # same
 
     rsync -avzh --exclude 'somedir1/*.csv'  \
                 --exclude '*/__pycache_*'  \
@@ -202,10 +215,9 @@ Example: making a copy of anaconda directory:
    -H - to preserve hardlinks
    --delete - to remove extra files at the destination
 
-
 rsync from remote server: 
 
-    rsync -avzh -e ssh remoteuser@remoteserver.com:/mypath/mydir "/mytarget/dir/
+    rsync -avzh -e ssh remoteuser@remoteserver.com:remote_path_mypath/mydir     local_path/
 
 # --------------------------------------------------------------
 using fdfind
