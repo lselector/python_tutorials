@@ -1,0 +1,257 @@
+vi / vim editor for a total beginner.
+
+vi is a unix platform editor.
+vi is a successor of QED, QED CTSS, ED, EX editors.
+It was written by Bill Joy in 1976 as a multi-line
+improvment of line editor "ex" that Joy had written with Chuck Haley.
+
+You edit file by typing on unix prompt:
+
+  vi  filename
+
+Then you press "i" to enter "insert" mode - and start typing.
+You press <ESC> to exit insert mode.
+You press ":" to get command prompt at the bottom - and type "wq" and press <ENTER>
+"w" = write
+"q" = quit
+
+=================================================
+There are 3 modes:
+ - insertion mode
+ - command/navigation mode
+ - ":"-commands mode
+
+The editor begins in command mode, where you can: 
+  navigate (move cursor), 
+  delete, 
+  copy(yank) / paste(put), 
+  save/restore, 
+  etc.
+
+Insertion mode begins upon entering an insertion key (i,a,o,r, etc) 
+or a change command (cw, etc.). 
+Pressing <ESC> ends Insertion mode.
+
+Most commands execute as soon as you type them 
+except for "colon" commands which execute when you press the return key.
+=================================================
+File saving, reverting, quitting
+:w          - write/save file
+:w somefile - save to file "somefile"
+:wq         - write & quit (same as :x   or  :ZZ )
+:q  - quit (will quit if no changes made)
+:q! - discard changes and quit
+:e! - discard changes (revert to saved)
+
+=================================================
+Inserting text
+i , I      insert before cursor, before line
+a , A      append after cursor, after line
+o , O      open new line after, line before
+r , R      replace one char, many chars
+
+=================================================
+Motion
+h , j , k , l    left, down, up, right (also arrows)
+w , W            forward next word
+e , E            forward end of word
+b , B            backward beginning of word
+( , )            sentence back, forward
+{ , }            paragraph back, forward
+0 , $            beginning, end of line
+1G , G           beginning, end of file
+nG or :n         line n
+fc , Fc          forward, back to char c
+H , M , L        top, middle, bottom of screen
+
+=================================================
+Deleting text:
+dw      - deletes a word (type d followed by a motion)
+dd      - delete line
+:d      - delete line
+x , X   - delete character to right, left
+D       - deleteto end of line
+
+=================================================
+Yanking text (copying in a buffer) - type y followed by a motion:
+y$ - yanks to the end of line.
+yy         line
+:y         line
+
+=================================================
+Changing text: "c" followed by a motion. 
+It is effectively a deletion command that leaves the editor in insert mode.
+cw - change a word
+C          to end of line
+cc         line
+
+=================================================
+Putting text:
+p    put yanked text after position or after line
+P    put before position or before line
+
+=================================================
+Bufers and markers: - Named buffers may be specified 
+before any deletion, change, yank, or put command. 
+Named markers may be set on any line of a file. 
+Any lower case letter may be a name. 
+I don't use them often - so removed them from this doc.
+
+=================================================
+Vim visual mode - used to copy/paste/delete:
+
+v - mark first character of the block
+<shift>-v - mark first line
+<ctrl>-v - mark first column
+
+then move the cursor to select the area, 
+then press the "action":
+  y - mark last character of the block and yank 
+      block to this point 
+  d - delete to this point
+
+then move the cursor to some other place,
+and use "p" or "P" to put the block there.
+
+vawy - copy a word
+vaby - copy a ( .. ) block
+vaBy - copy a { .. } block
+
+=================================================
+Search for Strings:
+
+/string    search forward
+?string    search backward
+n , N      repeat search in same, reverse direction
+:se ic     set ignore case for searches
+:se noic   back to case sensitive searches
+Shift-5    jump between matching parenthesis (or curlies or brackets)
+
+=================================================
+Replace:
+
+:s/pattern /string /flags  -  replace pattern with string
+The search and replace function is accomplished with the :s command.
+It is commonly used in combination with ranges or the :g command (below).
+
+flags:
+g , c     all on each line, confirm each
+&         repeat last :s command
+
+Example: 
+find/replace in all the file (2 methods):
+
+:%s/from/to/g
+:g/from/s//to/g
+
+=================================================
+Regular Expressions:
+
+. (dot)       any single character except newline
+*             zero or more repeats
+[...]         any character in set
+[^ ...]       any character not in set
+^ , $         beginning, end of line
+\< , \>       beginning, end of word
+\(: : :\)     grouping (putting into memory)
+\n            contents of n th grouping (recalling from memory)
+
+================================================= 
+Counts:
+
+Nearly every command may be preceded by a number 
+that specifies how many times it is to be performed. 
+For example, 5dw will delete 5 words 
+and 3fe will move the cursor forward 
+to the 3rd occurance of the letter e. 
+
+Even insertions may be repeated conveniently 
+with this method, say to insert the same line 100 times.
+
+================================================= 
+Ranges:
+
+Ranges may precede most "colon" commands 
+and cause them to be executed on a line or lines. 
+For example :3,7d would delete lines 3-7. 
+
+Ranges are commonly combined with the :s command 
+to perform a replacement on several lines.
+Example: replacement from current line to the end of the file:
+
+     :.,$s/pattern/string/g 
+
+Examples of ranges:
+
+:n ,m        lines n-m
+:.           current line
+:$           Last line
+:?c          Marker c
+:%           All lines
+:g/pattern/  All matching lines
+
+================================================= 
+Files operations:
+
+:w file    - Write file (current file if no name given):
+:r file    - Read file and insert its contents after current line
+:n         - Next file
+:p         - Previous file
+:e file    - Edit file
+:e!        - re-read current file (discard changes)
+!!command  - run unix command "command"
+:r!command - read in an output of shell command, for example:
+:r!which perl
+
+================================================= 
+Other commands:
+
+J     join lines
+.     repeat last text-changing command
+u     undo last change
+U     undo all changes on line
+ctrl-L    refresh the window
+
+================================================= 
+How to find/replace in all the file (2 methods):
+
+:%s/from/to/g
+:g/from/s//to/g
+for example:
+:g/<tab>/s//<space><space>/g
+
+================================================= 
+How to comment out current line and all following lines:
+
+  . = current line
+  $ = end of file
+  .,$ = here to end
+  %s = whole file
+
+so try something like this:
+
+  :%s/^/# / to comment
+  :%s/^# // to uncomment
+
+Here is how to do the same substituting the whole string
+(just to demonstrate the use of memory variable \1)
+
+:.,$s/\(.*\)/# \1/    to comment
+:.,$s/^# \(.*\)/\1/   to uncomment
+
+================================================= 
+How to repeat insert 50 times:
+50i-<ESC> - will repeat '-' 50 times
+
+Note: you can repeat not only one character, 
+but any text you type between 'i' and pressing <ESC>
+
+To insert <ctrl-character> 
+press <ctrl-v> <ctrl-character>
+
+================================================= 
+Today in Linux the "vi" is actually "vim" (vi improved). 
+
+You can customize vim in file $HOME/.vimrc  
+
+================================================= 

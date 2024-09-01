@@ -1,0 +1,264 @@
+Unix is the dominating Operating System (OS):
+  ~2 Bln android devices (Android OS), 
+  ~1 Bln iOS devices (iOS), 
+  ~1 Bln servers in clouds (Linux), 
+  100 Mln Macs (Mac OS)
+  etc. 
+
+Ken Thompson has created Unix OS in 1969. 
+Nowadays he works at Google as one of creators of the “Go” language:
+ - https://www.youtube.com/watch?v=sln-gJaURzk -
+
+In this article ( http://www.linfo.org/thompson.html ) you will learn how 
+Ken Thompson developed the UNIX operating System in 1969
+(to assist himself in playing and creating computer games).
+First version was in assembly language,
+then he created the B-language, and later rewrote it’s 
+kernel in C-language developed by Dennis Ritchie in ~1972
+
+First UNIX was running on computer with only 4K of memory!
+
+Then Ken Thompson has returned to UCB (University California Berkeley) 
+and while being there in 1975-76, he has introduced people there to Unix.
+This started the UCB clone of Unix 
+(BSD = Berkeley Software Distribution). 
+
+This later has become the foundation of Mach OS 
+for the Steve Job’s NeXT Station, 
+which was later acquired by Apple, 
+and it is the heart of modern MacOS and iOS.
+
+1980s - Richard Stallman creates a free software movement (GNU project) 
+        which led to development of numerous software tools. 
+
+1991 - Linus Torvalds, young student at the University of Helsinki in Finland, 
+       releases (posts on the Internet under GNU license) the first version
+       of Linux's kernel (Ver. 0.02), which he developed as a hobby. 
+
+Linux is an independent open source POSIX implementation of Unix. 
+
+Android OS is a Google’s version of Linux (android phones & tablets).
+
+There are many different versions of Linux:
+ - https://distrowatch.com/dwres.php?resource=major
+
+Ubuntu - the most common OS on clouds.
+Linux Mint is the most common for desktop work
+  (it is also based on Ubuntu).
+
+When you work on a Linux Virtual Machine in the cloud - you work in a terminal.
+Terminal is text-based (no graphics). 
+
+You give commands from the prompt.
+The interactive prompt program is called "shell".
+There are multiple shell programs: sh, csh, ksh, tcsh, bash, zsh, fish.
+The default Linux shell is "bash".
+
+There are multiple bash tutorials (search on youtube or google).
+
+Here is a list of basic unix/bash commands that you should understand
+
+# --------------------------------------------------------------
+    exit  (or ctrl-D)
+    ctrl-C
+    ctrl-S, ctrl-Q
+    ctrl-A    ctrl-E
+    ctrl-A K    (delete line)
+    arrow up/down (history)
+    tab-completion
+
+    uname
+    uname -a
+    date
+    who
+    last
+    history
+    history 10
+    man somecommand
+
+# --------------------------------------------------------------
+    touch file
+    vi
+    vi somefile
+    vim
+    view
+    vimdiff
+    less
+    more
+
+    top
+    htop
+
+    ps
+    ps auxww
+    ps -ef
+
+    cd
+    cd -
+    cd ~/somedir
+    pwd
+
+    ls
+    ls -alF   
+    ls -aldF */
+    ls -ltr
+
+# --------------------------------------------------------------
+    echo "path is $PATH"
+    echo $PATH
+    date
+    set
+    env
+    export
+    bash file.sh  vs source file.sh
+    . .bashrc
+    # difference between set and env
+    .bashrc vs .bash_profile vs .bash_aliases
+
+    stdin, stdout, stderr
+    cat file
+    head file
+    tail file
+    type myfunc
+    which python
+    which perl
+
+    grep somepattern somefile*
+    cat files* | grep pattern
+    cat files* | grep pattern | grep -v patter
+    find /somedir/  -name 'some*txt' -print | xargs grep something
+
+    # dealing with spaces in names of files:
+    find . -print0 | xargs -0 cmd
+    # -print0 makes find print NUL-terminated matches
+    # -0 makes xargs expect this format
+
+    find . -exec cmd -option1 -option2 -- {} +
+    find . -print0 | xargs -0 cmd -option1 -option2 --
+
+# --------------------------------------------------------------
+    cp file1 file2
+    mv file1 file2
+    rm file1
+    rm -rf dir1
+
+    tar zcvf myfile.tar.gz  somefiles*
+    tar ztvf myfile.tar.gz
+    tar zxvf myfile.tar.gz
+
+    zip -r mystuff.zip dir1 dir2
+    unzip mystuff.zip
+
+# --------------------------------------------------------------
+    kill pid     # pid = process id
+    kill -9 pid  # force kill 
+    pkill name   # kill by name
+
+    nohup
+    command &     (background)
+    
+    nohup python myscript.py > mylog.log 2>&1 &
+    
+    jobs
+    fg   ctrl-C
+
+    crontab -e
+    crontab -l
+
+# --------------------------------------------------------------
+    ssh
+    # ~/.ssh directory, public/private keys
+    ftp
+    telnet
+
+    curl
+    wget
+
+# --------------------------------------------------------------
+#   rsync - copies files and directories from source to destination
+#            only if there are new or changed files at source.
+#            Note - it will NOT delete the files at destination 
+#            (use --delete option if needed).
+#
+#   Examples syncing file(s):
+
+    # copy file(s)
+    rsync test1.py test2.py         # copy file (test2.py will be created or updated)
+    rsync -avzh test1.py test2.py   # copy file preserving attributes
+    rsync -avzh test1.py mydir/     # copy file into directory (mydir will be created or updated)
+    rsync -avzh *.py     mydir/     # copy all python files into directory (and create it if needed)
+
+    # copy directory
+    rsync -avzh mydir mydir2        # copies directory. Creates mydir2 if needed. Result: mydir2/mydir
+    rsync -avzh mydir mydir2/       # same
+    
+    # copy contents of directory
+    rsync -avzh mydir/ mydir2       # copies content from mydir to mydir2
+    rsync -avzh mydir/ mydir2/      # same
+
+    rsync -avzh --exclude 'somedir1/*.csv'  \
+                --exclude '*/__pycache_*'  \
+                /mypath/mydir "/mytarget/dir/
+
+    # -avzh options:
+    # -a - archive mode - recursive, preserving user, timestamps, ...
+    #       to preserve timestamps, etc., v-verbose, z-compress, h - human)
+    # -v - verbose
+    # -z - compress
+    # -h - human readable   
+
+
+Example: making a copy of anaconda directory:
+   
+   rsync -avzh -H --delete anaconda3/ anaconda3_bckup_2022-05-01
+
+   -H - to preserve hardlinks
+   --delete - to remove extra files at the destination
+
+rsync from remote server: 
+
+    rsync -avzh -e ssh remoteuser@remoteserver.com:remote_path_mypath/mydir     local_path/
+
+# --------------------------------------------------------------
+using fdfind
+
+fd mypattern /mydir  # find under mydir
+fd . /mydir          # find everything under mydir
+fd '^m.*back.*$'     # use regex
+fd -e txt            # find files with extension "txt"
+fd -g backup         # glob-based search (no regex)
+fd -H                # include dot files
+fd -H '^\.git$'      # find all '.git' directories
+fd -e txt -x cp {} {}.bak   # find - and execute command
+fd -p  # match on the full path of the file (not just file name)
+  -I option - include both hidden files and those matching .gitignore
+  -E <exclude_string> - to exclude stuff
+  -s   force case-sensitive search
+  -t <filetype>  # f - file, d - directory, l - symliink, x - executable)
+  -d - set maximum search depth
+fd pre-commit
+fd -H pre-commit
+fd … -X ls -lhd --color=always
+fd -e jpg -x convert {} {.}.png  # convert jpg files into png files
+fd -H .DS_Store -x rm {}
+
+  -S, --size <size>  # Limit results based on the size of files
+                     # where size is <+-><NUM><UNIT>,
+  fd -S +2g  # files larger than 2 GB
+
+   fd --newer 1h      # modified within last hour
+   fd --newer 1hour
+   fd --newer 1hours
+
+   --newer & --older are aliases to full options:
+    --changed-within <date|dur>  # newer than, modification time
+    --changed-before <date|dur>  # older than, modification time
+    --change-older-than
+              Examples:
+                --changed-before "2018-10-27 10:00:00"
+                --change-older-than 2weeks
+# --------------------------------------------------------------
+Using "find" command:
+find . -mtime -1                      # modified in last 24 hrs 
+find . -type f -mmin -120 -mmin +60   # modified 60-120 min ago
+# --------------------------------------------------------------

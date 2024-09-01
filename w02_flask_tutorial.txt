@@ -1,0 +1,475 @@
+# Flask Tutorial
+#
+# The python web framework was called "Flask"
+# because the previous was called "Bottle"
+# Flask (dict) - a container for alcohol or water, or a lab glass container.
+# In Russian: flyajka, kolba
+# --------------------------------------------------------------
+# Below are my notes from watching this video tutorial:
+#     https://www.youtube.com/c/TechWithTim/playlists
+#     Play list: "Flask Tutorial" - 11 videos
+#     https://www.youtube.com/watch?v=mqhxxeeTbu0&list=PLzMcBGfZo4-n4vJJybUVV3Un_NFS5EOgX
+# --------------------------------------------------------------
+# Video 1 (Flast Tutorial #1)
+#     https://www.youtube.com/watch?v=mqhxxeeTbu0
+# --------------------------------------------------------------
+# file "myapp.py"
+# --------------------------------------------------------------
+# simplest Hello application
+
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "<html>Hello</html>"
+
+if __name__ == "__main__":
+    app.run(debug=True)
+# --------------------------------------------------------------
+# to run:  python myapp.py
+# It starts running - check in browser url:
+#      http://127.0.0.1:5000/
+# --------------------------------------------------------------
+# dynamic content from URL
+# ------------------------
+from flask import Flask
+app = Flask(__name__)
+
+# ------------------------
+@app.route("/")
+def home():
+    return "<html>Hello</html>"
+
+# ------------------------
+# If URL http://127.0.0.1:5000/myword
+# then it will print "Hello myword"
+@app.route("/<name>")
+def user(name):
+    return f"Hello {name}"
+
+# ------------------------
+if __name__ == "__main__":
+    app.run(debug=True)
+# --------------------------------------------------------------
+# redirect
+# ------------------------
+file "myapp.py"
+from flask import Flask, redirect, url_for
+app = Flask(__name__)
+
+# ------------------------
+@app.route("/")
+def home():
+    return "<html>Hello</html>"
+
+# ------------------------
+@app.route("/<name>")
+def user(name):
+    return f"Hello {name}"
+
+# ------------------------
+# redirect
+@app.route("/admin/")
+def admin():
+    return redirect(url_for("home"))
+
+# ------------------------
+# redirect with parameter
+@app.route("/admin2/")
+def admin2():
+    return redirect(url_for("user", name="Admin!"))
+
+# ------------------------
+if __name__ == "__main__":
+    app.run(debug=True)
+
+# --------------------------------------------------------------
+# Video 2 (Flast Tutorial #2) - HTML Templates (Jinja2)
+#     https://www.youtube.com/watch?v=xIgPMguqyws
+#     https://en.wikipedia.org/wiki/Jinja_(template_engine)
+# --------------------------------------------------------------
+# create a subdirectory "templates"
+# create file "index.html" with some html
+
+<!doctype html>
+<html>
+<head>
+    <title>Home Page</title>
+</head>
+<body>
+    <h2>Home Page!</h2>
+    <p>Hello!</p>
+</body>
+</html>
+# ------------------------
+# using template
+# ------------------------
+from flask import Flask, redirect, url_for, render_template
+app = Flask(__name__)
+# ------------------------
+@app.route("/")
+def home():
+    return render_html("index.html")
+# ------------------------
+if __name__ == "__main__":
+    app.run(debug=True)
+# --------------------------------------------------------------
+# In html template add:
+#   
+#    {{content}}
+     {{r}}
+#    
+# Then in python:
+
+@app.route("/<name>")
+def home(name):
+    return render_html("index.html", content=name, r=2)
+# --------------------------------------------------------------
+# use {%   %}  to write python code in template
+
+     {%  for x in range(5) %}
+         {% if x % 2 == 1 %}
+             <p>{{x}}</p>
+         {% endif %}
+     {% endfor %}
+
+# for if it understands if, elif, else, endif
+
+# --------------------------------------------------------------
+# passing a list
+
+# in python: render_template("index.html", mylist=["a","b","c"])
+
+# in HTML: 
+     {%  for x in mylist %}
+         <p>{{x}}</p>
+     {% endfor %}
+
+# --------------------------------------------------------------
+# Video 3 (Flask Tutorial #3) - Template Inheritance & Bootstrap
+#     https://www.youtube.com/watch?v=4nzI4RKwb5I
+# --------------------------------------------------------------
+# base.html
+
+<!doctype html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <h2>My Website</h2>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
+
+# index.html
+
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+<h2>Test!</h2>
+{% endblock %}
+
+
+# in python
+render_template("index.html")
+# --------------------------------------------------------------
+# adding Bootstrap - a CSS / Javascript library
+#    https://getbootstrap.com/
+#    https://getbootstrap.com/docs/5.0/getting-started/introduction/#quick-start
+#
+#  copy css link - add to head
+#  copy script links - add at the bottom of the base.html
+#
+# Then go to "navbar" to grab some navbar code:
+#    https://getbootstrap.com/docs/5.0/components/navbar/
+# --------------------------------------------------------------
+# Video 4 (Flask Tutorial #4) - HTTP Methods (GET/POST) & Retrieving Form Data
+#     https://www.youtube.com/watch?v=9MHYHgh4jYc
+# --------------------------------------------------------------
+
+from flask import Flask, redirect, url_for, render_template, request
+
+@app.route("/login", methods=["POST","GET"])
+def login():
+    if request.method == "POST":
+        user = request.form["nm"]    # dictionary
+        return redirect(url_for("user", usr=user))
+    else:
+        return render_template("login.html")
+
+@app.route("/<usr>")
+def user(usr):
+    return f"<h2>{usr}</h2>"
+
+# file login.html
+
+{% extends "bash.html" %}
+{% block title %}Login Page{% endblock %}
+
+{% block content %}
+<form action="#" method="POST">
+    <p>Name:</p>
+    <p>input type="text" name="nm" /></p>
+    <p>input type="submit" value="submit" /></p>
+        
+</form>
+{% endblock%}
+
+# --------------------------------------------------------------
+# Video 5 (Flask Tutorial #5) - Sessions
+#    https://www.youtube.com/watch?v=iIhAfX4iek0
+# --------------------------------------------------------------
+from flask import Flask, redirect, url_for, render_template, request, session
+import datetime as dt
+
+app = Flask(__name__)
+app.secret_key = "some_secret_thing"
+app.permanent_session_lifetime = dt.timedelta(minutes=5)  # days=5   
+
+# ....
+
+@app.route("/login", methods=["POST","GET"])
+def login():
+    if request.method == "POST":
+        session.permanent = True
+        user = request.form["nm"]    # dictionary
+        session["user"] = user
+        return redirect(url_for("user"))
+    else:
+        if "user" in session:
+            return redirect(url_for("user"))
+        else:
+            return render_template("login.html")
+
+@app.route("/user")
+def user():
+    if "user" in session:
+        user = session["user"]
+        return f"<h2>{user}</h2>"
+    else:
+        return redirect(url_for("login"))
+
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect(url_for("login"))
+
+# --------------------------------------------------------------
+# Video 6 (Flask Tutorial #6) - Message Flashing
+#    https://www.youtube.com/watch?v=qbnqNWXf_tU
+# --------------------------------------------------------------
+
+# in login.html page
+
+{% extends "bash.html" %}
+{% block title %}Login Page{% endblock %}
+
+{% block content %}
+    {% with messages = get_flash_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+<form action="#" method="POST">
+    <p>Name:</p>
+    <p>input type="text" name="nm" /></p>
+    <p>input type="submit" value="submit" /></p>
+        
+</form>
+{% endblock%}
+
+# in python
+
+from flask import Flask, redirect, url_for, render_template, request, session, flash
+# ...
+
+@app.route("/logout")
+def logout():
+    if "user" in session:
+        user = session["user"]
+        session.pop("user", None)
+        flash(f"You have been logged out, {user}", "info")  # warning, info, error
+    return redirect(url_for("login"))
+
+# ---------- making better user page
+# file user.html
+
+{% extends base.html %}
+{% block title %}User{% endblock %}
+{% block content %}
+    {% with messages = get_flash_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+<p>Welcome, {{user}}</p>
+{% endblock %}
+
+# in python:
+
+@app.route("/user")
+def user():
+    if "user" in session:
+        usr = session["user"]
+        return render_template("user.html", user=usr)
+    else:
+        return redirect(url_for("login"))
+# --------------------------------------------------------------
+# Video 7 (Flask Tutorial #7) - Using SQLAlchemy Database
+#    https://www.youtube.com/watch?v=uZnp21fu8TQ
+# --------------------------------------------------------------
+# pip install flask-sqlalchemy
+
+# in HTML:
+   <input type="email" name="email" placeholder="Enter Email" value="{{email if email}}"/> 
+
+
+# in python
+
+from flask_sqlalchemy import SQLAlchemy
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'    # table
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+ 
+db = SQLAlchemy(app)
+
+class users(db.Model):
+    _id   = db.Column("id", db.Integer, primary_key=True)
+    name  = db.Column(db.String(100))
+    email = db.Column(db.String(100))
+
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
+
+ 
+    email = request.form["email"]
+    # -------------------------------
+    found_user = users.query.filter_by(name=user).first():
+    if found_user:
+        session['email'] = found_user.email
+    else:
+        usr = users(user,"")   # get value from db
+        db.session.add(usr)    # 
+        db.session.commit()
+    # -------------------------------
+    found_user = users.query.filter_by(name=user).first():
+    found_user.email = email
+    db.session.commit()
+    # -------------------------------
+    # how to query all entries
+    users.query.all()
+    # -------------------------------
+    # users.query.filter_by(name=user).first()
+    # users.query.filter_by(name=user).all()
+    # users.query.filter_by(name=user).delete()
+    # user.delete()
+
+if __name__ == "__main__":
+    db.create_all()
+    app.run(debug=True)
+
+# --------------------------------------------------------------
+# Video 8 (Flask Tutorial #8) - Add/Delete/update Users w/ SQLAlchemy
+#    https://www.youtube.com/watch?v=1nxzOrLWiic
+# --------------------------------------------------------------
+XXXXXXX
+# --------------------------------------------------------------
+# Video 9 (Flask Tutorial #9) - Static Files (Custom CSS, Images & Javascript)
+#    https://www.youtube.com/watch?v=tXpFERibRaU
+# --------------------------------------------------------------
+from flask import Flask, render_template
+app = Flask(__name__)
+
+# ------------------------
+@app.route("/home")
+@app.route("/")
+def home():
+    return render_template("home.html")
+# ------------------------
+if __name__ == "__main__":
+    app.run(debug=True)
+
+# make folders "templates" and "static"
+# make two files in templates:  base.html, home.html
+# make 
+# add it like this:
+#   <link rel="stylesheet" type'"text/css" href="{{ url_for('static', filename='styles/mystyle.css')}}">
+
+# for image:
+  <img src="{{ url_for('static', filename='images/myimage.jpg')}}">
+# --------------------------------------------------------------
+# Video 10 (Flask Tutorial #10) - Blueprints & Using Multiple Python Files
+#    https://www.youtube.com/watch?v=WteIH6J9v64
+#    Good tutorial:
+#    https://exploreflask.com/en/latest/blueprints.html
+# --------------------------------------------------------------
+# file second.py
+
+from Flask import Blueprint, render_template
+
+second = Blueprint("second", __name__,
+    static_folder="static",
+    template_folder="templates")
+
+# set our routes and functions below
+
+@second.route("/home")
+@second.route("/")
+def home():
+    render_template("home.html")
+
+# ...
+# 
+# then in main file myapp.py
+
+from flask import Flask, render_template
+from second import second
+
+app = Flask(__name__)
+app.register_blueprint(second, url_prefix="/admin")
+
+# ------------------------
+@app.route("/")
+def test():
+    return render_template("home.html")
+
+# ------------------------
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+# You can put blueprints in subdirectories.
+# For example, we can put "second.py" into "admin" subdirectory
+# like this:
+# 
+#    myapp.py
+#    admin/second.py
+#    admin/templates.py
+#    admin/static.py
+#    admin/__init__.py    # empty file
+#    
+#then you import blueprint "second" like this:
+
+from admin.second import second
+
+
+# --------------------------------------------------------------
+# Video 11 (Flask Tutorial #11) - How to Deploy a Flask App to a Linux Server
+#    https://www.youtube.com/watch?v=YFBRVJPhDGY
+# --------------------------------------------------------------
+XXXXXXX
+# --------------------------------------------------------------
+# --------------------------------------------------------------
+# --------------------------------------------------------------
+# --------------------------------------------------------------
+# --------------------------------------------------------------
+

@@ -1,0 +1,242 @@
+How to work with Git.
+
+Git is a source control system
+    http://git-scm.com/
+
+cd
+git config --global user.name "Last, First"
+git config --global user.email FLast@example.com
+mkdir ~/workdir
+cd ~/workdir
+git clone git@git.us.ourdomain.com:workdir/repo1.git
+git clone git@git.us.ourdomain.com:workdir/repo2.git
+
+# --------------------------------------------------------------
+For the above commands to work, you first need 
+to have ssh keys and to enter them on the central server. 
+This and other things are described below.
+
+Also it make sense to customize git 
+by adding these files:
+    ~/.git-completion.bash
+    ~/.gitconfig
+    ~/.gitexcludes
+    ~/.mygit
+    ~/bin/gist
+    chmod 755 ~/bin/gist
+
+Then edit ~/.gitconfig as you need 
+(as a minimum, change name and email).
+
+# --------------------------------------------------------------
+Here is how you start fresh if you don't have a repository 
+and didn't even added ssh keys to communicate with central server:
+
+We start with creating a new project:
+
+   Project is created on the Git web site: 
+       http://git.us.ourdomain.com
+
+   Go there, login.
+   First time you will have also to generate ssh keys on unix or windows
+   (do NOT specify a pass-phrase - just hit <ENTER>),
+   and to copy the public key to https://git.us.ourdomain.com/profile/keys
+
+   If you were already given access to some repositories - you may see them.
+   To create a new repository, press on "+" at the top right to create a project.
+   You will need to specify the name (test123) and namespace (workdir)
+   You will get to the page which gives you the url for repository:
+       git@git.us.ourdomain.com:workdir/test123.git
+   and commands to run on unix.
+
+Now go on unix prompt (on MS Windows procedures should be similar):
+
+# set your user and email (unless they are already set using .gitconfig)
+git config --global user.name "Last, First"
+git config --global user.email "FLast@yourdomain.com"
+
+cd somedirectory
+cd ~/workdir  # if you made repository in workdir group
+
+# make directory - name same as git project name
+mkdir test123
+cd test123
+git init
+
+# add .gitignore file - put a comment (#) if nothing to ignore
+vi .gitignore 
+
+# add files and directories
+...
+
+# submit and push to remote first time
+# note that "ci" (check in) is an alias to "commit", as is set up 
+# in ~/.gitconfig file we recommend
+git add .
+git ci -m'first commit'
+git remote add origin git@git.us.ourdomain.com:workdir/test123.git
+git push -u origin master
+
+# Next time to submit and push you don't have to add origin.
+# You do simply two commands:
+git ci -a -m'some message'
+git push
+
+# --------------------------------------
+# if you changed something: add, commit, push to remote:
+
+git add fname                # add file (staging)
+git add .                    # add directory 
+git ci -m'describe change'   # commit added stuff locally
+git ci -a -m'describ'        # add everything and commit in one line
+git push                     # push to remote server
+
+# --------------------------------------------------------------
+Here are some of my custom unix commands
+
+gist      # shows if any local/remote changes
+gitup     # pull changes from remote server and merge into yours
+gd fname  # see diffs between your code and remote server
+
+gistall    # run "gist"  in several repositories under workdir (list is in ~/.gistall)
+gistall -u # run "gitup" in several repositories
+
+# --------------------------------------
+Note - gistall is a link to ~/workdir/py_lib/bin/gistall.py
+       gist is a link to shell script  ~/workdir/py_lib/bin/gist
+       gitup, and gd are shell functions defined in ~/.mygit
+       and sourced in ~/.bashrc . 
+       See in ~/workdir/py_lib/setup_files/
+       Basically they do this:
+
+gist:
+    echo "------------------------------------- files which diff from remote repo"
+    git fetch;
+    git diff --name-status origin/master .
+    echo "------------------------------------- files changed locally"
+    git status .
+    echo "-------------------------------------"
+
+gitup:
+    git stash clear;
+    git stash;            # stash away local changes you made (if any)
+    git pull;             # pull stuff from server
+    git stash apply       # apply your changes (from stash) on top
+
+gd:
+    git fetch;
+    git show origin/master:./$1 > ./$1.prev;
+    vimdiff -c 'set diffopt+=iwhite' ./$1.prev ./$1;
+    /bin/rm -f ./$1.prev
+# --------------------------------------
+My most frequently used commands (99% of time this is all I need):
+
+gistall
+gistall -u
+gist
+gd somefile
+git add .
+git ci -m'some comment'
+git push
+gitup
+# --------------------------------------
+How to remove big files from repository.
+I used brute-force approach described here:
+http://stackoverflow.com/questions/9683279/make-the-current-commit-the-only-initial-commit-in-a-git-repository
+
+Note: change "myrepo" to directory you are working with
+
+cd ~workdir/myrepo
+rm -rf .git
+rm big_files
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin git@git.us.ourdomain.com:workdir/myrepo.git
+git push -u --force origin master
+
+# --------------------------------------
+How to create an archive of git directory (without .git repository)
+https://riptutorial.com/git/example/9513/create-an-archive-of-git-repository
+
+git archive --format zip HEAD > archive-HEAD.zip
+git archive --format tar.gz HEAD > archive-HEAD.tar.gz
+git archive --output=archive-HEAD.tar.gz HEAD
+# --------------------------------------
+How to add yet another git repo.
+(presuming you already set-up locally and on remote
+
+login to http://git.us.ourdomain.com:
+create a new repo 'myrepo' in group workdir
+
+in terminal in your unix account:
+cd workdir
+mkdir myrepo
+cd myrepo
+git init
+# add .gitignore file - put a comment (#) if nothing to ignore
+vi .gitignore 
+# add files and directories
+...
+git add .
+git ci -m'first commit'
+git remote add origin git@git.us.ourdomain.com:workdir/myrepo.git
+git push -u origin master
+# --------------------------------------
+How to do Git on Windows.
+From command window, or using GUI.
+(1) Download and install Git for windows:
+     - http://git-scm.com/download/win
+    When installing it, opt to use from Windows Command Prompt
+    and opt to "Checkout Windows-style, commit Unix-style line endings"
+
+(2) Copy your .ssh directory and .gitconfig file from Unix to Windows,
+    and place it in the right spot.
+    In corporate environment when users' directories are 
+    on the network drive, the place is there, for example:
+       \\nyit\somename\.gitconfig
+       \\nyit\somename\.ssh
+
+    on Windows XP it can be here:
+       C:\Documents and Settings\username\.ssh\ 
+    on Windows 7 it may be also here:
+       C:\Users\username\.ssh
+       etc.
+
+    At this point you should be able to start working 
+    from Command Prompt like this (similar to Unix):
+
+    mkdir workdir
+    cd workdir
+    git clone git@git.us.ourdomain.com:workdir/repo1.git
+    git clone git@git.us.ourdomain.com:workdir/repo2.git
+
+(3) Download and install a Git GUIs.
+    There are many GUIs to choose from.
+    - http://git-scm.com/downloads/guis
+    - http://softwarerecs.stackexchange.com/questions/1308/what-is-a-good-newbie-friendly-graphical-git-client-for-windows
+    - http://stackoverflow.com/questions/157476/what-guis-exist-for-git-on-windows
+    - https://git.wiki.kernel.org/index.php/InterfacesFrontendsAndTools
+    etc.
+
+    Below are instructions for installation of one GUI application,
+    Atlassian SourceTree: http://www.sourcetreeapp.com/
+
+    Download and install the application.
+    Start it, Go to Menu  Tools > Options.
+    Select "General" tab.
+    Enter your Full Name and your email 
+    ( same as you have in https://git.us.ourdomain.com/profile )
+
+    In section "SSH Client Configuration" select "OpenSSH" from dropdown.
+    Browse for SSH key.
+    In my case it is :   C:\Users\myname\.ssh\id_rsa
+
+    In section "Misc" set project folder.
+    In my case it is :  U:\workdir
+
+    Now you should be able to add (open) repositories using File > Open
+    And then working with remote repositories from GUI.
+# --------------------------------------
+
+

@@ -1,0 +1,15 @@
+**/.ipynb_checkpoints
+**/junk*.*
+**/.DS_Store
+**/__pycache__/
+**/*.py[cod]
+**/Thumbs.db
+**/OLD
+**/SKIP
+**/~*
+*_pdf.txt
+*_ppt.txt
+cnn.pth
+data/MNIST/
+data/cifar-10-batches-py/
+data/cifar-10-python.tar.gz

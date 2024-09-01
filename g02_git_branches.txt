@@ -1,0 +1,436 @@
+git_branches.txt
+About work-flows which use Git.
+How to handle merge conflicts, branching, etc.
+
+git
+Gitlab = https://about.gitlab.com
+Gitlab-ci (continuus integration)
+github
+
+One way to work with branches:
+  development is done in multiple dev/feature branches.
+  This is convenient when several people work on the
+  same feature for weeks/months.
+  Once feature is done, it is merged into the "master" branch.
+  All conflicts are resolved, the system is tested.
+  Then master branch is merged into productin branch
+  (master version is taken in case of conflicts).
+Note - basically the production release is done by
+       using the "git merge" command.
+
+System testing and release to prod is automated/scheduled.
+
+The Admin creates/merges dev branches using GitLab web interface,
+because it is convenient, visual, sends emails to the team,
+allows to assign to team members, comment, etc.
+Another option is to use a unix library git-flow, which is 
+basically a wrapper around existing unix git commands. 
+
+Some resources:
+- http://nvie.com/posts/a-successful-git-branching-model/
+- http://jeffkreeftmeijer.com/2010/why-arent-you-using-git-flow/
+- https://github.com/nvie/gitflow
+- https://www.atlassian.com/git/tutorials/comparing-workflows
+
+Here is a description of how the group uses Git:
+# --------------------------------------------------------------  
+I personally have a fairly simple workflow, and I do most of my 
+branching in the gitlab UI. 
+... you use "rebase" quite a bit, which I don't.
+
+The simplest case has two branches: production and master
+ - master branch deploys to TST, through gitlab-ci
+ - production branch deploys to PRD, through gitlab-ci
+ - Edits are always made to master; never to production. 
+   We use the protected branch feature of gitlab to enforce this.
+ - So long as this policy is enforced, you can always do a simple 
+   merge from master -> production (ff) using gitlab UI. 
+   You will very rarely have a merge conflict.
+
+In general, this policy works very well for the simple case.
+ - It assumes that you will be merging into production frequently, 
+   so that bug fixes & development can both be implemented 
+   in master branch
+ - Even then, it gets a little weird when, say, you want to 
+   edit the .gitlab-ci .yml file for the production branch.  
+   Or, say, config settings which will only apply to the 
+   production deployment. You end up editing these in the 
+   master branch (where they have no impact) before merging 
+   those changes into the production branch
+ 
+This simplest case then evolves into a more complex scenario
+when we have a significant feature to develop.  
+When this happens, we create a feature-specific branch off of 
+master named according to the feature.  This way, bug-fixes 
+and other things can be implemented in master before merging 
+into production.
+Here is what this looks like:
+ - master branch deploys to TST, through gitlab-ci
+ - production branch deploys to PRD, through gitlab-ci
+ - (new) feature branch also deploys to TST using alternate 
+   path, through gitlab-ci:
+     git checkout b new_feature;
+     git add .;
+     git commit;
+     git push origin new_feature
+ - Consistent with the simple scenario, edits are always made
+   to master before merging into production. We use the 
+   protected branch feature of gitlab to enforce not making
+   edits to production directly.
+ - Additionally, we make every attempt to merge feature branch
+   into master before merging into production. The reason for 
+   this is to minimize merge conflicts on the merge into production
+ - Bugfixes are typically made to master directly, and in some 
+   cases I will merge master into the feature branch to apply 
+   those bugfixes to the feature under development. 
+   (I could use rebase here, but I don't)
+ - So long as these policies are maintained, you can always do
+   a simple merge from master -> production (ff) using 
+   gitlab UI. You will very rarely have a merge conflict.
+ 
+In general, this policy works very well for the majority of cases.
+ - I tend not to delete the feature branches after the merge has completed.
+ - I tend not to use tags; for me they are not that helpful
+ - We will sometimes get into a scenario where we have several
+   feature-specific branches in flight. We continue to adhere 
+   to the policy of merging into master before production.
+ - Almost all merges are done in the gitlab UI, by creating 
+   a merge request. This reinforces an emphasis on the test 
+   code deployed by gitlab-ci, since the test status is 
+   prominently displayed.
+   - This also allows you to assign the merge to someone else 
+     in the case where your changes are significant & you 
+     would like someone else to review your changes
+   - This triggers a notification to the team that new code 
+     is being merged in
+   - There is room to comment on the contents of a merge
+# --------------------------------------------------------------
+October 2015 - Grokking Git Training
+  online:
+    https://prh.gitbooks.io/grokking-git-at-prh/content/
+  PDF, EPUB, etc:
+    https://www.gitbook.com/book/prh/grokking-git-at-prh/details
+
+CVCS - Centralized Version Control System (SVN, CVS, etc.)
+    Pros: Gold copy maintained in one place
+    Cons: single point of failure, confusing merging/branching
+
+CVCS - Distributed Version Control System (Git, Mercurial)
+    Pros: redundancy, can work offline - very fast
+          branching/merging is good
+          developers can pu;l/push between each other
+          flexible work flows.
+    Cons: confusing because too flexible
+    http://blogs.atlassian.com/
+
+git - flexible, light and fast, 
+      non-disruptive branching, 
+      secure, open source
+
+Gitlab = https://about.gitlab.com - 
+pros:
+  - dashboard of activity stram
+  - web-based repository file browser
+  - web based file editor
+  - built-in wiki
+  - code-review tools
+  - graphic diff viewer
+  - graphic git history viewer
+  - enhanced repository permissions
+  - milestone and issue management
+  - code snippets
+  - web hooks
+  - access to git repos over ssh and/or https
+  - integrates with Slack and Jira
+
+Gitlab.com vs Github.com
+
+Github - all projects are required to be publicly visible
+         (unless you buy a paid version)
+
+Gitlab:
+  - you can create private projects on Gitlab.com
+  - has protected branches
+  - has multiple authentication levels
+  - has group level milestones
+  - can attach file, issue, comment
+  - has work-in-progress protection
+  - allows installation on RHEL / CentOS unix
+  - has independent packaging - allowing deployment onto 
+    a variety of systems
+
+Workflows:
+  https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows
+
+  Centralized work-flow: one central repo
+  
+  Integration Manager Work-Flow
+    repositories:
+        blessed          integration manager - a person who pulls from dev - and pushes into blessed
+        dev1pub, dev1priv             
+        dev2pub, dev1priv
+        etc.
+    integration manager - a person/process to copy into blessed repo
+
+  Linux: push-model
+     blessed_repo
+     dictator_repo
+     leutenant_repos
+     dev1pub, dev2pub, etc. 
+
+PRH Gitlab - not public, behind firewall
+Using Gitlab:
+  project == repo
+  personal projects - and group projects, 
+  group permission levels
+  add files
+  "star"  (or unstar)
+  "fork" (project to a user or a group)
+  "download" 
+  "global"
+  "+" - new issue, merge request, new branch or tag
+  issues and milestones (create, assign, comment, close)
+
+# --------------------------------------------------------------
+https://git.us.ourdomain.com/ci/
+  - http://doc.gitlab.com
+  - https://about.gitlab.com/gitlab-ci/
+  - http://doc.gitlab.com/ci/yaml/README.html
+
+ci server controls over servers via "runner" installed on them.
+
+repositories on git.ourdomain.com
+runners installed on Build Boxes
+build boxes watch for changes, and execute build instructions as needed
+build occurs within temporary directory on build box
+resulting productionalized code remotely deployed onto destination servers
+destination servers run/serve application
+
+This is the prefered architectureL
+ - increased security
+ - decreased runner maintenance
+ - build processing load on dedicated resources
+ - promotes "clean deployment " ...on destination servers
+ 
+Gitlab >> Gitlab ci >> build >> dev/tst server
+                    >> build >> prod    server
+
+mount via ssh - "fuse ssh"
+# --------------------------------------------------------------
+# some unix git commands for branches
+# --------------------------------------------------------------
+git branch         # shows a list of branches, 
+                   # current branch is marked
+git branch levtest # creates a branch "levtest"
+git co levtest     # switch to branch "levtest" (co = checkout)
+git co -b levtest2 # create a new branch - and switch to it
+
+
+vi myfile.txt      # creating file in branch levtest2
+git add .
+git ci -m'comment'
+git push --set-upstream origin levtest2 # next time simply do git push
+
+git co master       # switch to master,   check that no myfile.txt
+git co levtest2     # switch to levtest2, check - you see myfile.txt
+git ci master       # switch to master again
+git merge levtest2  # merge levtest2 into master
+
+git branch -d levtest   # delete branch levtest
+git branch -d levtest2  # delete branch levtest2
+
+git branch --merged     # show list of branches which were already
+                        # merged into the current branch
+git branch --no-merged
+
+# --------------------------------------------------------------
+# merging: conflicts resolution
+# --------------------------------------------------------------
+When merging, you can get a conflict:
+git merge mybranch
+Auto-merging index.html
+CONFLICT (content): Merge conflict in myfile.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+read the man page:
+  git merge --help
+  man git-merge
+
+Some examples of options to git merge to prevent conflicts:
+
+git merge --ff-only  mybranch
+    Refuse to merge and exit with a non-zero status unless 
+    the current HEAD is already up-to-date 
+    or the merge can be resolved as a fast-forward.
+
+git merge -Xours  mybranch
+    overwrite using current branch head, ignore everything else
+
+One you have conflicts, git adds standard markers to the files
+that have conflicts, so you can open them manually and 
+resolve those conflicts. 
+
+Example:
+
+<<<<<<< HEAD:myfile.txt
+some text
+=======
+changed text1
+changed text2
+>>>>>>> mybranch:index.html
+
+You need to edit the file to resolve those conflicts, 
+then commit the result.
+
+Note:
+If you don't want to manually resolve these, but just want
+to find/review those conflicts, and then to say for the whole
+file which version you want, you can do this:
+
+grep -lr '<<<<<<<' .  # recursively get a list of matching files
+# resolve one file at a time:
+git checkout --ours PATH/FILE    # accept local/our version
+git checkout --theirs PATH/FILE  # accept remote/other branch version
+# resolve all together:
+grep -lr '<<<<<<<' . | xargs git checkout --ours
+grep -lr '<<<<<<<' . | xargs git checkout --theirs
+
+Then:
+git status
+git add myfile
+git ci -m'...'
+git push
+
+# --------------------------------------------------------------
+# merging: conflicts resolution - how to abort the merge
+# --------------------------------------------------------------
+Thre is no dry-run option.
+So to see possible conflicts you do this:
+  git status # make sure it is empty 
+  git merge somebranch
+  # inspect results here
+  git merge --abort  # abort the merge
+# ----------------------------
+    git merge --abort
+        git merge --abort is equivalent to git reset --merge 
+        when MERGE_HEAD is present (when merge is in progress).
+
+    git reset --merge
+
+    git reset --hard HEAD^
+
+    git checkout --theirs somefile.txt
+
+    git fetch origin
+    git reset --hard origin
+
+    git fetch origin 
+    git reset origin 
+      (soft reset, your changes are still present)
+    git checkout their_file.txt
+      (steamroll your own changes back to match the origin)
+
+    git fetch
+    git rebase origin
+
+    git fetch
+    git log ..@{upstream}
+    git diff ..@{upstream}
+    git rebase origin
+
+# --------------------------------------------------------------
+# vim plugins to use with git
+# --------------------------------------------------------------
+    https://github.com/tpope/vim-fugitive
+       git wrapper
+    
+    https://github.com/sjl/threesome.vim
+       plugin to do merges
+
+# --------------------------------------------------------------
+# using vimdiff for manual merging:
+# --------------------------------------------------------------
+in ~/.gitconfig
+    [core]
+      pager        = cat
+    [diff]
+      external = git_diff_wrapper
+
+where ~/bin/git_diff_wrapper is:
+    #!/bin/bash
+    echo "$1 $2"
+    vimdiff -c 'syntax off' "$1" "$2"
+
+# Note - the above wrapper will only work if you 
+have only 2 arguments. It breaks if you add options.
+
+Then you can do:
+    git diff somefile.txt
+    
+    git diff branch1:./somepath/file1.txt branch2:./somepath/file2.txt
+    git diff branch1  branch2    # diff between the tips of the two branches
+    git diff branch1..branch2    # diff between the tips of the two branches
+    git diff branch1...branch2   # diff in branch2 between tip and branching point
+
+More diff examples: 
+    git diff hash1  hash2
+    git diff -r hash1  hash2   # recursive
+
+# --------------------------------------------------------------
+# misc git stuff
+# --------------------------------------------------------------
+git revert   : creates new commit history record and changes code back 
+               (this typically is preferred)
+git checkout : pulls content from specific commit, does not touch history
+git reset    : changes code and potentially erases history ("undo button")
+
+git pull
+# inspect - didn't like
+git reset --merge ORIG_HEAD  # remove pulled stuff, keep your local changes
+
+git merge --no-ff feature-y  # graphically keep the history of the branch intact.
+git log --graph
+git log --graph --pretty=oneline --abbrev-commit
+git log -5     # show last 5 commits only
+git log -n 5   # show last 5 commits only
+git log --abbrev-commit    # show short versions of commit hashes
+git log --color
+git log --color --abbrev-commit -8 --graph
+# --------------------------------------------------------------
+git checkout -b feature-y
+# ... make changes ...
+git add .
+git commit -m "[message]"
+git checkout master  # switched back to master
+# --------------------------------------------------------------
+
+
+# --------------------------------------------------------------
+Note about rebase operation.
+# --------------------------------------------------------------
+Admin almost never uses rebase.
+But rebase is a good thing.
+Here is a link:
+  https://git-scm.com/book/en/v2/Git-Branching-Rebasing#The-Perils-of-Rebasing
+The first part of this has some good explanations of why rebasing is good practice.
+
+"""
+ ... rebase local changes you’ve made but haven’t shared 
+ yet before you push them in order to clean up your story, 
+ but never rebase anything you’ve pushed somewhere. 
+"""
+
+If you are working on a DEV feature branch while there is a steady stream of
+PROD fixes in the main (master) branch, it makes sense to rebase DEV
+branch frequently (daily) to apply those PROD fixes to DEV branch.
+If this is not done frequently, and if it is a group-owned project,
+it means that once the feature DEV branch is done, there might be 
+a difficult merge to do at the end because of a long list of accumulated 
+production changes, and there is a danger that some wires will get crossed.
+For example, people may have forgotten which were the bug fixes 
+versus other things that didn’t get kept.
+(In other words, a complicated manual merge might be needed.)
+
+On a personal project where others are not contributing, rebasing 
+frequently might not make sense.
+# --------------------------------------------------------------

@@ -1,0 +1,160 @@
+There are multiple ways to work with Python virtual environments.
+
+Recommended way - use "venv" module.
+    - included into standard python library since Python 3.3
+    - subset of original virtualenv (except for support for python 2.* and some minor features)
+    - endorsed by PyPA (Python Packaging Authority)
+    - https://www.pypa.io/en/latest/
+    - https://docs.python.org/3/tutorial/venv.html
+
+Here are some commands from "venv" tutorial:
+# --------------------------------------------------------------
+cd
+mkdir envs
+cd envs
+python3 -m venv tutorial-env
+
+source tutorial-env/bin/activate        # in bash shell
+source tutorial-env/bin/activate.fish   # in fish shell
+tutorial-env\Scripts\activate.bat       # on Windows
+
+cd tutorial-env
+
+        ./bin
+        ./include
+        ./lib/python3.8/site-packages/pip
+
+env | grep -i path
+
+    PATH=/Users/levselector/envs/tutorial-env/bin:...... 
+    _OLD_VIRTUAL_PATH=...
+
+which python
+    /Users/levselector/envs/tutorial-env/bin/python -> /Users/levselector/anaconda3/bin/python
+
+which pip
+    /Users/levselector/brett_env/bin/pip    # python script
+
+You can run pip install commands, for example:
+
+    python -m pip install novas
+    python -m pip install requests==2.6.0
+    python -m pip install --upgrade requests
+    pip show requests
+    pip list
+    pip freeze > requirements.txt
+    python -m pip install -r requirements.txt
+
+you can restore previous default environment
+and reset $PATH to original value
+
+    deactivate 
+
+# --------------------------------------------------------------
+Here are links for virtualenv, venv, and some other utilities:
+
+  virtualenv 
+    - original tool written by Ian Bicking (who also wrote "pip")
+    - https://www.ianbicking.org/
+    - https://pypi.org/project/virtualenv/
+    - https://virtualenv.pypa.io/en/latest/
+    - https://www.youtube.com/watch?v=N5vscPTWKOk
+    - https://github.com/pypa/virtualenv
+
+  venv 
+    - included into standard python library since Python 3.3
+    - endorsed by PyPA (Python Packaging Authority 
+    - https://www.pypa.io/en/latest/
+
+  pyvenv 
+    - deprecated in Python 3.6
+
+  pyenv 
+    - pure shell tool
+    - https://github.com/pyenv/pyenv
+    - https://k0nze.dev/posts/install-pyenv-venv-vscode/
+    - https://github.com/pyenv/pyenv-virtualenv
+
+  virtualenvwrapper 
+    - a set of extensions to Ian Bickings virtualenv tool
+    - useful when you have many environments to switch between
+    - https://virtualenvwrapper.readthedocs.io/en/latest/
+
+  pipenv 
+    - combining pip and virtualenv into one command
+    - https://github.com/pypa/pipenv
+
+  conda
+    - creates virtual environments under anaconda3/envs/ 
+
+See some comparisons for example here:
+
+https://stackoverflow.com/questions/41573587/what-is-the-difference-between-venv-pyvenv-pyenv-virtualenv-virtualenvwrappe
+
+# --------------------------------------------------------------
+conda offers its own mechanisms to manage virtual environments.
+The environments will be created under the main anaconda directory,
+for example:  
+   anaconda3/envs/myenv1/
+   anaconda3/envs/myenv2/
+
+It is OK to use it on your local machine.
+But for environment with many developers, it is probably safer 
+to use "venv" instead of "conda", because with "venv" each
+user will create his environments in separate directories as needed
+and will not have to mess with the main anaconda directory.
+
+Here are some "conda" commands:
+
+https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+
+conda create --name myenv
+conda create -n myenv python=3.6
+conda create -n myenv scipy       # creates environment with specific package
+conda create -n myenv scipy=0.15.0
+conda create -n myenv python=3.6 scipy=0.15.0 astroid babel
+conda create --no-default-packages -n myenv python
+conda env create -f environment.yml
+
+conda create -n myenv python
+conda install -n myenv scipy=0.15.0
+
+conda activate myenv # use "conda deactivate" to deactivate
+
+conda env list
+conda info --envs
+
+conda create --prefix ./envs jupyterlab=0.35 matplotlib=3.1 numpy=1.16
+conda activate ./envs
+
+$ conda config --set env_prompt '({name})'
+# This will edit your .condarc 
+
+conda env update --prefix ./env --file environment.yml  --prune
+
+conda create --name myclone --clone myenv
+
+conda list -n myenv
+conda list -n myenv scipy
+conda list
+conda list --explicit
+conda list --explicit > spec-file.txt
+conda create --name myenv --file spec-file.txt
+
+conda init --help
+auto_activate_base: bool
+conda activate base
+conda activate --stack myenv
+conda config --set auto_stack 1
+conda config --set changeps1 false
+conda config --set changeps1 true
+
+conda install -n myenv pip
+conda activate myenv
+pip <pip_subcommand>
+
+conda env config vars list
+conda env config vars set my_var=value
+conda env config vars unset my_var -n test-env
+# --------------------------------------------------------------
+

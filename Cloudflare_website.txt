@@ -1,0 +1,59 @@
+Use Cloudflare to make a simple static website
+
+https://www.cloudflare.com
+https://en.wikipedia.org/wiki/Cloudflare
+
+Cloudflare is an American company (in San Francisco, CA)  
+that provides CDN (Content Delivery Network) services, 
+cloud cybersecurity, DDoS mitigation, 
+ICANN-accredited domain registration services.
+
+Think of it as a giant intelligent network spread 
+across hundreds of cities around the world.
+
+Cloudflare acts as a security guard, filtering 
+malicious traffic and protecting websites 
+from DDoS attacks, data breaches, and other online threats. 
+
+It encrypts connections (HTTPS), offers two-factor 
+authentication, and provide many other services.
+
+Suppose you want to create a simple static website.
+You can use CloudFlare to:
+
+ - Brainstorm the domain name - and register it
+ - Set up DNS and redirects
+ - Integrate with Google workspace (for gmail)
+ - Host a simple static website (up to 25 MB)
+   You can upload files to "pages" either from your 
+   computer, or from GitHub. Easy.
+
+So CloudFlare is perfect for a short "business card"-like website 
+to keep your BIO, resume, and other related files
+
+======================================================
+cloudflare.com
+login
+domain registrtion (if need to register a new domain)
+websites - to work with existing domain ( DNS, ... )
+Workers & Pages - select "Pages" and create a new "myname"
+    it will point to myname.pages.dev
+    upload your files (whole directory) - and deploy
+    set custom domain (myname.com)
+go to website DNS - and add CNAME   www   myname.com
+But CNAME doesn't work - so I have to make a redirect rule
+   select the website, click on DNS on left,
+   then lower on left you will see "Rules"
+   Click on "Rules, then on "Redirect Rules"
+   Then create a "Redirect Rule" as following:
+
+   rule name: "www-redirect"
+   custom filter expression
+   when hostname equals www.myname.com
+   then
+   dynamic  concat("https://myname.com", http.request.uri.path)   301
+
+   deploy
+======================================================
+Problems - search https://community.cloudflare.com
+======================================================

@@ -1,0 +1,75 @@
+Hello Manager,
+
+GitHub doesn't allow a user to have more than one free account.
+If you create two accounts (using different emails),
+they will eventually detect it, 
+and will make both accounts invisible
+to others until you resolve the problem.
+
+================================================================
+If you have a personal GitHub account, 
+and also need to do some consulting
+for a business, they can give
+you access to their account. 
+They either allow you to use your personal 
+email, or create a "corporate" email for you.
+
+Either way their account is not yours,
+you are only invited and getting access.
+
+You yourself will still own only one "personal" account.
+
+================================================================
+Note, it is possible to add second (Company) email
+to your existing account.
+
+Finally, it is possible to configure the account
+so that GitHub Company-related activity will 
+only use Company email.
+
+I understand this is convoluted, 
+but this the unfortunate reality.
+
+================================================================
+Several months ago my GitHub account was suspended
+because I have created additional GitHub account
+using a Client's email - to have access to Client's GitHub.
+
+It took me almost a month communicating with 
+GitHub to repair this situation and re-enable my GitHub.
+
+================================================================
+Note, it was always against GitHub policy
+to have more than one "free" account per person.
+
+But in the past it was possible to get away with this.
+
+Recently GitHub is tightening their access policies,
+and when they will catch you as having more than one account,
+they will disable your access. 
+
+Starting this August 2021 they will enforce two-factor authentication.
+
+So even if you use different computers to access your personal
+and work-related GitHub accounts, they will probably still be able
+to detect that you are the same person
+
+https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/
+
+================================================================
+Here are some related links.
+
+Types of GitHub accounts
+ - https://docs.github.com/en/github/getting-started-with-github/learning-about-github/types-of-github-accounts
+
+Using one account for all your projects
+ - https://github.community/t/using-one-account-for-all-your-projects/10197
+
+Sending your "work" notification to your "work" email
+ - https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/setting-up-notifications/configuring-notifications#choosing-the-notification-delivery-method-for-organizations-you-belong-to
+
+Is it advisable to ask employees to create 'work' GitHub accounts?
+ - https://softwareengineering.stackexchange.com/questions/151518/is-it-advisable-to-ask-employees-to-create-work-github-accounts/151652
+
+How to manage work and personal GitHub accounts
+ - https://everythingsysadmin.com/2017/01/two-github-accounts.html

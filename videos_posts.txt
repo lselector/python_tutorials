@@ -1,0 +1,84 @@
+====================================================
+ChatGPT for text: https://chat.openai.com/chat
+
+images:
+Stable Diffusion - https://stablediffusionweb.com
+Dall-e-2 https://openai.com/dall-e-2/  (same login as ChatGPT)
+Unsplash https://unsplash.com/
+Midjourney https://midjourney.com
+Freepik https://www.freepik.com
+====================================================
+Creating animated GIFs:
+Canva, GIPHY, Imgflip, Kapwing
+    # ---------------------------------
+    Canva - https://www.canva.com/ 
+    Tutorial (10 min) - https://www.youtube.com/watch?v=zJSgUx5K6V0 - 
+    Tutorial (100 min) - https://www.youtube.com/watch?v=un50Bs4BvZ8 - 
+    # ---------------------------------
+    EZGIF - make GIFs from 2 or more images, or from videos
+    Tutorial - https://youtu.be/f9vhe4_MLUs - 
+      - https://ezgif.com  - 
+    # ---------------------------------
+    Free animated backgrounds
+      - https://pixabay.com/videos/search/animated%20background/ - 
+    # ---------------------------------
+    Tutorial - Make Animated GIF using Microsoft PowerPoint
+      - https://youtu.be/szbFDKVHkOM - 
+    Tutorial - Create Moving Backgrounds in Microsoft PowerPoint
+      - https://www.youtube.com/watch?v=sbzFRRUFGQ4 - 
+====================================================
+tome.app - AI powered, story, create PPTs
+.. https://beta.tome.app
+Copy.ai - write anything
+.. https://www.copy.ai
+====================================================
+
+I am thinking how to make my
+short Linkedin videos better.
+
+The Friday seminars are live recordings.
+But Linkedin videos may be different.
+
+Today I will try:
+.. Make several takes to make it faster, more energetic.
+.. Normalize voice volume using ffmpeg-normalize
+.. Start using a video editor to
+ - remove pauses,
+ - add short intro/ending parts
+ - insert graphics or video
+
+Here are examples:
+ .. https://www.youtube.com/watch?v=dU1TeJ36zuc
+ .. https://www.youtube.com/watch?v=27R0d1xUK9Y
+===================================
+In the future I am thinking about using AI video makers.
+For example, talking Avatar tools:
+
+https://www.youtube.com/watch?v=U0HNdsxC8YU
+
+Synthesia - https://www.synthesia.io
+HeyGen (Movio)- https://app.heygen.com/guest/home
+Elai - https://elai.io
+D-ID - https://www.d-id.com/photo-to-video/
+DEEPBRAIN - https://www.deepbrain.io/aistudios
+
+Example:
+   GPT-5 in 100 seconds
+   https://www.youtube.com/watch?v=dYXk0LETkmw
+
+
+===================================
+Use AI doodle video makers
+and text-to-video or animation makers
+
+https://ai.invideo.io - generate video from text
+
+text to animation:
+Voiceover https://elevenlabs.io/
+Image to Video https://runwayml.com/
+Story https://chat.openai.com/
+Image Generation https://app.leonardo.ai/
+Video Editing https://www.capcut.com/
+
+veed.io - VEED Studio
+===================================

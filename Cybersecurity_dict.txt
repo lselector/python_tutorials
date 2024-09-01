@@ -1,0 +1,173 @@
+Cybersecurity terms with definitions:
+
+
+AWS: Amazon Web Services, a leading cloud platform
+providing many security services and tools.
+
+Data Breach: An incident where protected or sensitive
+information is accessed or stolen without
+authorization.
+
+Encryption: The process of scrambling data using
+mathematical algorithms, making it unreadable without
+a decryption key. Encryption helps protect data
+confidentiality.
+
+Enterprise Password Management: Solutions for storing,
+managing, and provisioning passwords across an
+organization, enforcing strong password policies and
+automating resets.
+
+Exploit: A piece of code or technique designed to take
+advantage of a vulnerability in order to gain
+unauthorized access to a system.
+
+Firewall:  A network security device (hardware or
+software) designed to block unauthorized traffic and
+prevent outsiders from accessing private networks
+connected to the internet
+
+Firewalls and Networking: Hardware or software that
+controls traffic flow between networks using sets of
+rules, creating a barrier between trusted and
+untrusted networks.
+
+Identity Providers (IdP): Services that create,
+maintain, and manage digital identities. They store
+user data, handle authentication, and often enable
+single sign-on capabilities.
+
+Identity and Access Management (IAM): A framework of
+technologies and policies that control user access to
+technology resources. IAM systems manage user
+identities and their associated permissions across
+different systems.
+
+Intrusion Detection System (IDS): A software or device
+that monitors networks for malicious activity or
+policy violations and raises alerts.
+
+Key Rotation: Periodic changing of cryptographic keys
+to reduce the risk of exploitation if a key is
+compromised.
+
+Malware: Short for "malicious software." A broad term
+for software designed to harm a computer system.
+Examples include viruses, ransomware, spyware, and
+trojan horses.
+
+Mobile Device Management (MDM): Software solutions
+that give administrators control over mobile devices
+employees use for work, enforcing security policies,
+software updates, and restrictions.
+
+Patch: Software updates that fix vulnerabilities to
+prevent future exploits.
+
+Phishing: Fraudulent attempts to acquire sensitive
+information (like usernames, passwords, and credit
+card numbers) by posing as a trustworthy source, often
+through emails or fake websites.
+
+Proxy: An intermediary server that acts as a gateway
+between a client and a server, masking the client's
+true IP address and providing traffic control and
+filtering.
+
+Python: A popular programming language widely used in
+cybersecurity for developing automation scripts,
+vulnerability scanning tools, and security analyses.
+
+Ransomware:  Malware that encrypts a victim's files
+and demands payment for the decryption key.
+
+Role-Based Access Control (RBAC): An access management
+model where permissions are assigned to roles rather
+than individual users. Users get access based on the
+roles they have, simplifying permission management.
+
+SSL Inspection: The process of intercepting and
+inspecting encrypted SSL/TLS traffic to identify and
+block malicious content or activity.
+
+Secrets Management: Tools and processes for securely
+storing and managing sensitive credentials like API
+keys, passwords, and certificates.
+
+Security Assertion Markup Language (SAML): An XML-
+based standard for exchanging authentication and
+authorization data between an Identity Provider (IdP)
+and service providers. This facilitates single sign-
+on.
+
+Security Information and Event Management (SIEM):
+Software that collects and analyzes log data from
+various sources across a network, providing  real-time
+threat detection and  analysis.
+
+Security Orchestration, Automation, and Response
+(SOAR): Solutions that integrate with various security
+tools, automating incident response, investigation,
+and remediation.
+
+Security Posturing: The overall assessment of an
+organization's cybersecurity readiness, identifying
+strengths, weaknesses, and areas for improvement.
+
+Single Sign-On (SSO): An authentication mechanism that
+allows a user to log in once and access multiple
+systems or applications without entering separate
+credentials for each.
+
+Spyware: A type of malware designed to secretly
+collect information about a user's activity, such as
+passwords, browsing history, or financial data.
+
+System for Cross Domain Identity Management (SCIM): A
+standard for automating the exchange of user identity
+information between systems and domains. SCIM
+streamlines user provisioning and de-provisioning
+processes.
+
+Terraform: An open-source tool for defining and
+managing IT infrastructure as code, often used for
+provisioning and managing cloud resources and security
+configurations.
+
+Trojan Horse: A malicious program disguised as
+legitimate software. Once opened, Trojans can perform
+various harmful actions, such as stealing data or
+allowing remote access to the infected system.
+
+Virtual Private Network (VPN): Creates a secure,
+encrypted connection over public networks (like the
+Internet), providing remote users with secure access
+to internal networks and resources.
+
+Virus: A self-replicating malware program that spreads
+by attaching itself to other files or programs.
+Viruses can damage data, steal information, or disrupt
+operations.
+
+Vulnerability: A weakness or flaw in a system or
+network that can be exploited by attackers.
+
+Zero Trust Network Access (ZTNA): A model for securely
+accessing applications and resources based on Zero
+Trust principles. ZTNA creates micro-perimeters around
+specific resources rather than relying on broad
+network segmentation.
+
+Zero Trust: A cybersecurity philosophy based on the
+idea of "never trust, always verify."  It enforces
+strict authentication and authorization for every user
+and device, regardless of location or previous
+connection history.
+
+Zero-trust Security: An approach to cybersecurity that
+assumes no user or device should automatically be
+trusted. It requires continuous verification before
+granting access or permissions.
+
+
+

@@ -1,0 +1,182 @@
+Window Functions.
+
+It is basically SELECT ... OVER ... syntax
+.. https://docs.microsoft.com/en-us/sql/t-sql/queries/select-over-clause-transact-sql?view=sql-server-ver16
+
+It can be used with different types functions:
+  Ranking, 
+  Aggregate, 
+  Analytic, 
+  Next Value For
+
+---------------------------------------------------------------------
+
+Ranking Functions - RANK, DENSE_RANK, NTILE, ROW_NUMBER
+.. https://docs.microsoft.com/en-us/sql/t-sql/functions/ranking-functions-transact-sql?view=sql-server-ver16
+
+Aggregate Functions - COUNT, MAX, MIN, SUM, AVG, STDEV, etc.
+.. https://docs.microsoft.com/en-us/sql/t-sql/functions/aggregate-functions-transact-sql?view=sql-server-ver16
+
+Analytic Functions - CUME_DIST, 
+                     FIRST_VALUE, LAST_VALUE, 
+                     LAG, LEAD, 
+                     PERCENT_RANK, PERCENTILE_CONT, PERCENTILE_DISC 
+.. https://docs.microsoft.com/en-us/sql/t-sql/functions/analytic-functions-transact-sql?view=sql-server-ver16
+
+NEXT VALUE FOR
+.. https://docs.microsoft.com/en-us/sql/t-sql/functions/next-value-for-transact-sql?view=sql-server-ver16
+
+---------------------------------------------------------------------
+
+Window Functions can be used instead of GROUP BY
+And they can do much more than GROUP BY
+
+---------------------------------------------------------------------
+-- using "GROUP BY"
+
+SELECT order_id, 
+       SUM(unit_price * qty) as total_order
+FROM order_details
+GROUP BY order_id
+
+---------------------------------------------------------------------
+-- using Window Function (PARTITION BY instead of GROUP BY)
+
+SELECT DISTINCT 
+     order_id,
+     SUM(unit_price * qty) OVER (PARTITION BY order_id) as total_order
+FROM order_details
+
+---------------------------------------------------------------------
+-- using different groupings in the same query
+
+SELECT  
+     *,
+     SUM(unit_price * qty) OVER (PARTITION BY order_id) as total_by_order
+    ,SUM(unit_price * qty) OVER (PARTITION BY product_id) as total_by_product
+FROM order_details
+
+---------------------------------------------------------------------
+-- When we need a complex multi-step processing, 
+-- we can use "WITH" syntax to create intermediate temporary results.
+-- This is called CTE = "Common Table Expressions".
+-- A CTE is basically a temporary result set.
+
+with 
+    CTE1 ( col1, col2, ... ) as ( select ... ),
+    CTE2 (col, ...) as (select ... from CTE1 left outer join ... on ... ),
+    CTE3 (col, ...) as (select ... from CTE2 left outer join ... on ... ),
+    CTE4 (col, ...) as (select ... from CTE3 left outer join ... on ... )
+select  ... from CTE4 where ...;
+
+---------------------------------------------------------------------
+-- Example below: 
+--   for each customer
+--   get difference between sizes of 2nd and 3rd orders
+
+-- We will use CTEs to do step-by-step processing.
+-- We will use analytic functions (LEAD or LAG) to get this differences.
+
+
+WITH 
+
+--------------------------------------------
+-- to get the 2nd and 3rd order, we need to sort orders by date.
+-- date is in OrderDetails table, so we joiin it with Orders table
+--------------------------------------------
+CTE_Starter AS 
+(
+    SELECT DISTINCT O.custid, O.orderdate,
+        SUM( OD.qty * OD.unitprice) 
+        OVER( PARTITION BY O.orderid) AS OrderTotal
+    FROM Orders AS O
+    INNER JOIN OrderDetails as OD on O.orderid = OD.orderid
+),
+
+--------------------------------------------
+-- order by date for each customer 
+--------------------------------------------
+CTE_Phase2 AS
+(
+    SELECT *,
+    ROW_NUMBER() OVER(PARTITION BY custid order by orderdate) AS OrderChron
+    FROM CTE_Starter
+),
+
+--------------------------------------------
+-- calculate the difference between 2nd and 3rd orders for each customer
+--------------------------------------------
+CTE_Phase3 AS
+(
+    SELECT *,
+        OrderTotal - LEAD(OrderTotal, 1, 0.0) 
+        OVER(PARTITION BY custid ORDER BY OrderChron) AS Diff_2_3
+    FROM CTE_Phase2
+    WHERE OrderChron IN (2,3)
+)
+
+SELECT * FROM CTE_Phase3
+WHERE OrderChron = 2
+
+---------------------------------------------------------------------
+Frame == Window Frame
+Framing - operations within rows in Frames
+---------------------------------------------------------------------
+Window Ranking Functions
+ - RANK (may include ties and gaps)
+ - DENSE_RANK (may include ties, but no gaps)
+ - ROW_NUMBER
+ - NTILE
+
+Distribution Functions (stats analysis):
+ - PERCENT_RANK
+ - CUME_FIRST
+ - PERCENTILE_CONT
+ - PERCENTILE_DISC
+
+Offset Functions (comparison between rows in a set)
+ - LAG
+ - LEAD
+ - FIRST_VALUE
+ - LAST_VALUE
+
+---------------------------------------------------------------------
+SELECT 
+  employee, 
+  orderyear, 
+  totalsales AS currsales,
+  LEAD(totalsales, 1, 0) 
+    OVER (PARTITION BY employee ORDER BY orderyear) AS nextsales
+FROM Sales.OrdersByEmployeeYear
+ORDER BY employee, orderyear
+---------------------------------------------------------------------
+example: running aggregate by customer
+
+SELECT 
+  O.orderid,
+  O.custid,
+  O.orderdate,
+  OD.qty * OD.unitprice AS LineTotal,
+  SUM (OD.qty * OD.unitprice) OVER(PARTITION BY custid order by orderdate
+    ROWS BETWEEN UNBOUND PRECEDING AND CURRENT ROW) as RunningTotal
+
+FROM Orders AS O
+    INNER JOIN OrderDetails as OD on O.orderid = OD.orderid
+
+ORDER BY custid, orderdate
+---------------------------------------------------------------------
+example: sliding set of rows within window
+
+SELECT 
+  O.orderid,
+  O.custid,
+  O.orderdate,
+  OD.qty * OD.unitprice AS LineTotal,
+  SUM (OD.qty * OD.unitprice) OVER(PARTITION BY custid order by orderdate
+    ROWS BETWEEN 1 PRECEDING AND 2 FOLLOWING) as RunningTotal
+
+FROM Orders AS O
+    INNER JOIN OrderDetails as OD on O.orderid = OD.orderid
+
+ORDER BY custid, orderdate
+---------------------------------------------------------------------

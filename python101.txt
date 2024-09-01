@@ -1,0 +1,116 @@
+Python has become THE language of Data Science.
+Everybody uses Anaconda python distribution.
+
+The main dev. environment is JupyterLab:
+  https://jupyterlab.readthedocs.io/en/stable/
+
+Also you need a simple text editor, for example:
+  https://www.sublimetext.com/
+
+Look on youtube for online tutorials for:
+
+    python, pandas, numpy, scikit-learn
+
+for example:
+
+Python Programming - tutorial by Derek Banas:
+ - https://www.youtube.com/watch?v=N4mEzFDjqtA
+
+Python Pandas Data Science Tutorial by Keith Galli:
+ - https://www.youtube.com/watch?v=vmEHCJofslg
+
+Python NumPy Tutorial by Edureka:
+ - https://www.youtube.com/watch?v=8JfDAm9y_7s
+
+Scikit-Learn Tutorial by Simplilearn:
+ - https://www.youtube.com/watch?v=0Lt9w-BxKFQ
+
+Python main data structures:
+
+  a = 1
+  b = 2.5
+  c = "crocodile"
+  d = 'big mouse'
+  e = """multi-line
+         string"""
+  # ---------------------
+  f = list()
+  f = [1,"mama", 2.5]
+  # ---------------------
+  g = (1,2,3)          # tuple immutable
+  h = tuple([1,2,3])   # same tuple
+  # ---------------------
+  h = set([1,1,2,2,3,3])  # {1,2,3} set removes duplicates
+  h = {1,2,3}             # same set
+  # ---------------------
+  i = dict()
+  i = {"k1":"v1", "k2":"v2"}
+  i["k3"] = "v3"
+  if "k3" in i:
+      ...
+
+  aa = i["k1"]   # "v1"
+  del i["k1"] 
+  # ---------------------
+
+Python common keywords and expressions:
+
+True, False, None
+
+if, elif, else, finally
+
+if (a == b or c != d) and (e==f):
+    pass
+
+for ii in range(5):
+    print(ii)
+
+def myfunction():
+    pass  # placeholder
+    return something
+
+import os, sys
+from mymodule import myfunc
+
+while ... :
+    pass
+    if ...:
+        continue
+    if ...:
+        break
+    pass
+
+try:
+   pass # do something
+except:
+   pass # processs error
+   raise some_error
+
+if "a" in mystring:
+    do_something
+
+if "a" not in mystring:
+    do_something
+
+ii = 0
+while ii < 10:
+    ii += 1
+    print(ii)
+
+with open("myfile.txt") as fh:
+    txt = fh.read()
+
+Some other keywords:
+    await
+    class
+    is
+    lambda
+    nonlocal	
+    assert
+    global
+    async
+    yield
+
+See for example here:
+
+  https://realpython.com/python-keywords/

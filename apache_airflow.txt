@@ -1,0 +1,90 @@
+Installation on Mac
+MacOS Monterey ver. 12.0.1
+
+# --------------------------------------------------------------
+I tried official docs on installation without virtual env,
+ - https://airflow.apache.org/docs/apache-airflow/1.10.13/installation.html
+
+and got many conflicts between packages.
+
+# --------------------------------------------------------------
+So I decided to follow these instructions:
+
+   Setting up Apache-Airflow in MacOS
+   By Hiren Rupchandani & Mukesh Kumar
+   INSAID, Aug 17, 2021
+     - https://insaid.medium.com/setting-up-apache-airflow-in-macos-2b5e86eeaf1
+
+# first make sure to install CommandLineTools
+
+xcode-select --install
+
+# then install virtualenv
+pip install virtualenv
+
+cd
+mkdir airflow_workspace
+cd airflow_workspace
+virtualenv airflow_env
+source airflow_env/bin/activate  (in bash)
+source airflow_env/bin/activate.fish  (in fish)
+
+pip3 install apache-airflow[gcp,sentry,statsd]
+
+/Users/levselector/airflow_workspace/airflow_env/bin/python -m pip install --upgrade pip
+
+pip install pyspark
+pip install sklearn
+
+mkdir airflow  
+
+cd airflow # ~/airflow_workspace/airflow/
+
+airflow db init  # creates SQLight DB under ~/airflow/
+
+# make directory for DAGs
+mkdir dags    # ~/airflow_workspace/airflow/dags/
+
+# ceate an admin user
+airflow users create --username admin --password q --firstname Lev --lastname Selector --role Admin --email lev.selector@gmail.com
+
+# check the list of users
+airflow users list
+
+# start airflow scheduler
+airflow scheduler   # takes time
+
+# start webserver in new terminal window:
+cd ~/airflow_workspace/
+source airflow_env/bin/activate.fish
+cd airflow
+airflow webserver
+
+Open browser: http://localhost:8080/
+
+Select "DAGs" in the top horizontal menu
+You will see many examples.
+Select "example_python_operator"
+And switch to "Code"
+You will see python script
+
+Related source script is here:
+ ~/airflow_workspace/airflow_env/lib/python3.9/site-packages/airflow/example_dags/example_python_operator.py
+
+And the log file is here:
+ ~/airflow/logs/scheduler/2022-02-03/native_dags/example_dags/example_python_operator.py.log
+
+On the top-right you can see a triangular "run" button - press on it to trigger the run.
+
+
+# --------------------------------------------------------------
+Next tutorial:
+
+Hello World using Apache-Airflow
+ - https://insaid.medium.com/hello-world-using-apache-airflow-91859e3bbfd5
+
+Yet another tutorial:
+
+How to build a data extraction pipeline with Apache Airflow
+ - https://towardsdatascience.com/how-to-build-a-data-extraction-pipeline-with-apache-airflow-fa83cb8dbcdf
+# --------------------------------------------------------------
