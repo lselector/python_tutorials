@@ -1,14 +1,17 @@
 /************************************************
 
-Modified from the excellent tutorial by Derek Banas (47 min video):
-
+Modified from excellent tutorials by Derek Banas 
+(2016) (47 min video):
  - https://www.youtube.com/watch?v=U1EFgCNLDB8
+(2022) (2 h 35 min video):
+ - https://www.youtube.com/watch?v=ygL_xcavzQ4
 
-Install Rust:
+Install Rust (instructions and downloads):
+ - https://www.rust-lang.org/tools/install
 
-MacOS: run this command in a terminal:
+For MacOS: run this command in a terminal:
 
-  curl https://sh.rustup.rs -sSf | sh
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 This will download and install the official compiler for the Rust
 programming language, and its package manager, Cargo.
@@ -18,28 +21,15 @@ Important files:
     ~/.cargo   # CARGO_HOME  env. variable
     ~/.cargo/bin # cargo, rustc, rustup, etc.
 
-This path will then be added to PATH in:
-  ~/.profile
-  ~/.bash_profile
-  ~/.bashrc
-  ~/.zshenv
+This path will then be added to PATH in $HOME dir:
+  .bashrc , .bash_profile, .profile, .zshenv
 
 which rustc
 rustc --version
 
-Install using an installer for Windows
-https://www.rust-lang.org/downloads.html
-
-Type the following to verify install rustc --version
-
-Install Rust support in Atom
-Packages -> Command Palette -> Toggle
-Type install -> Install Packages and Themes
-atom-language-rust -> Click Install
-
-Compile: 
+How to Compile: 
   rustc rusttut.rs -A warnings
-Run:
+How to Run:
   ./rusttut # or rusttut.exe on Windows
 ************************************************/
 

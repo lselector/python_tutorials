@@ -1,0 +1,81 @@
+2024-11-02
+I have installed Rust and follow the video and main.rs file
+
+cargo new rust_tutorial # creates project directory 
+                        #   rust_tutorial/Cargo.toml
+                        #   rust_tutorial/src/main.rs
+# TOML = Tom's Obvious Minimal Language - config file for cargo
+
+cd rust_tutorial
+cargo.lock - stores versions of all dependencies
+cargo update - updates all dependencies to latest versions
+to compile:
+    rustc main.rs
+or  cargo build
+or  cargo run
+
+cargo check - to check that code compiles without errors
+cargo build --release
+
+to get rid of "unused" warnings:
+#![allow(unused)]
+// ---------------- LIBRARIES
+use std::io;
+use std::io::*;
+use rand::Rng;  // add rand crate to Cargo.toml
+
+use std::io::{Write, BufReader, BufRead, ErrorKind};
+use std::fs::File;
+
+use std::cmp::Ordering;
+
+mod restaurant;  // want to use restaurant module
+
+// ---------------- FUNCTIONS
+
+fn say_hello(){
+    println!("Hello");
+}
+
+fn get_sum(x: i32, y: i32){
+    println!("{} + {} = {}", x, y, x+y);
+}
+
+fn get_sum_2(x: i32, y: i32) -> i32 {
+    // Note that no semicolon
+    x + y
+}
+
+fn get_sum_3(x: i32, y: i32) -> i32 {
+    return x + y;
+}
+
+// Return multiple values
+fn get_2(x: i32) -> (i32, i32){
+    return (x+1, x+2);
+}
+
+fn print_str(x: String){
+    println!("A string {}", x);
+}
+
+fn print_return_str(x: String) -> String{
+    println!("A string {}", x);
+    x
+}
+
+fn change_string(name: &mut String){
+    name.push_str(" is Happy");
+    println!("Message : {}", name);
+}
+
+// This function sums values in a list (Receives reference to list)
+fn sum_list(list: &[i32]) -> i32 {
+    let mut sum = 0;
+    for &val in list.iter(){
+        sum += &val;
+    }
+    sum
+}
+
+
