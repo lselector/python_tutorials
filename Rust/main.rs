@@ -142,7 +142,21 @@ fn sum_list(list: &[i32]) -> i32 {
     sum
 }
 
-// XXXXXXXXXXXXXX
+// -------------------------------------------------------------
+// You can use interactive environments to learn Rust
+// REPL = Read-Eval-Print Loop
+// There is an online playground:
+//     https://play.rust-lang.org
+// or you can install it locally
+// cargo install evcxr_repl  # installs  ~/.cargo/bin/evcxr
+// then add link "rust to this executable
+// cd ~/.cargo/bin
+// ln -s evcxr rust
+// then type "rust" from prompt - you will get a prompt (like ipython)
+// >> let x = 42
+// >> println!("The value is: {}", x)
+// :quit
+// -------------------------------------------------------------
 
 // ----- GENERIC FUNCTION -----
 // When defining a function that uses a generic place the name
@@ -156,6 +170,9 @@ use std::ops::Add;
 fn get_sum_gen<T:Add<Output = T>>(x: T, y: T) -> T {
     return x + y;
 }
+
+
+// XXXXXXXXXX
 
 fn main() {
     // It is common to indent with 4 spaces
@@ -308,7 +325,8 @@ fn main() {
 
     // Compares age to valid age and cmp returns an Ordering which
     // has either the value Less, Greater, or Equal
-    my_age = 18;
+    use std::cmp::Ordering;
+    let my_age = 18;
     let voting_age = 18;
     match my_age.cmp(&voting_age) {
         Ordering::Less => println!("Can't Vote"),
@@ -358,7 +376,9 @@ fn main() {
     for val in arr_2.iter() {
         println!("Val : {}", val);
     }
+
     // Start Here
+
     // ----- TUPLES -----
     // Tuples can contain multiple data types in a list of fixed size
     // We convert to strings with to_string()
@@ -448,6 +468,10 @@ fn main() {
     for char in st8.chars() {
         println!("{}", char);
     }
+
+
+    ////// XXXXXXXXXXXXX
+
 
     // ----- CASTING WITH AS -----
     // You can convert to different types in multiple ways

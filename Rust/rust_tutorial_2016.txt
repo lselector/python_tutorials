@@ -33,6 +33,13 @@ How to Run:
   ./rusttut # or rusttut.exe on Windows
 ************************************************/
 
+// https://www.rust-lang.org/learn
+// https://doc.rust-lang.org/rust-by-example/ - Online Book
+// https://doc.rust-lang.org/book/ - Book 2024
+// -------------------------------------------------------------
+
+
+
 fn main() {
     println!("Hello World")  //  exclamation means it is a macro
 }
