@@ -1,6 +1,0 @@
-product_id,product_name,price,quantity,supplier
-1,Apple,1.0,100,Sup A
-2,Banana,0.5,150,Sup B
-3,Orange,0.7,200,Sup A
-4,Mango,2.0,75,Sup C
-5,Grape,1.5,,
