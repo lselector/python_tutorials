@@ -1,0 +1,372 @@
+----------------------------------------------------------------
+Example of creating OLAP Cube using a star schema
+
+We have 3 Dimension tables:
+   - DimProduct: Product hierarchy and attributes
+   - DimCustomer: Customer geography hierarchy
+   - DimDate: Time dimension with various levels
+and one fact table:
+   - FactSales: Contains measures like quantity, price, and sales amount
+                Foreign keys linking to all dimension tables
+
+This structure allows for:
+ - Multi-dimensional analysis
+ - Drilling down/up through hierarchies
+ - Slice and dice capabilities
+ - Aggregations at different levels
+
+Below:
+  SQL to create tables
+  SQL to populate tables with sample data
+  SQL to query tables showing:
+   - Category and regional analysis using ROLLUP
+   - Time-based analysis using CUBE
+   - Product performance analysis across geographies
+
+----------------------------------------------------------------
+-- Dimension Tables
+
+CREATE TABLE DimProduct (
+    ProductKey INT PRIMARY KEY,
+    ProductID VARCHAR(10),
+    ProductName VARCHAR(50),
+    Category VARCHAR(30),
+    SubCategory VARCHAR(30),
+    UnitPrice DECIMAL(10,2)
+);
+
+CREATE TABLE DimCustomer (
+    CustomerKey INT PRIMARY KEY,
+    CustomerID VARCHAR(10),
+    CustomerName VARCHAR(100),
+    Country VARCHAR(50),
+    Region VARCHAR(50),
+    City VARCHAR(50)
+);
+
+CREATE TABLE DimDate (
+    DateKey INT PRIMARY KEY,
+    FullDate DATE,
+    Year INT,
+    Quarter INT,
+    Month INT,
+    MonthName VARCHAR(10),
+    Week INT,
+    WeekDay VARCHAR(10)
+);
+
+-- Fact Table
+
+CREATE TABLE FactSales (
+    SalesKey INT PRIMARY KEY,
+    ProductKey INT FOREIGN KEY REFERENCES DimProduct(ProductKey),
+    CustomerKey INT FOREIGN KEY REFERENCES DimCustomer(CustomerKey),
+    DateKey INT FOREIGN KEY REFERENCES DimDate(DateKey),
+    Quantity INT,
+    UnitPrice DECIMAL(10,2),
+    Discount DECIMAL(4,2),
+    SalesAmount DECIMAL(10,2)
+);
+
+----------------------------------------------------------------
+-- Sample data insertion
+
+INSERT INTO DimProduct VALUES
+(1, 'P001', 'Laptop', 'Electronics', 'Computers', 999.99),
+(2, 'P002', 'Smartphone', 'Electronics', 'Phones', 699.99),
+(3, 'P003', 'Desk Chair', 'Furniture', 'Chairs', 199.99);
+
+INSERT INTO DimCustomer VALUES
+(1, 'C001', 'John Doe', 'USA', 'West', 'Los Angeles'),
+(2, 'C002', 'Jane Smith', 'USA', 'East', 'New York'),
+(3, 'C003', 'Mike Johnson', 'Canada', 'East', 'Toronto');
+
+INSERT INTO DimDate VALUES
+(20240101, '2024-01-01', 2024, 1, 1, 'January', 1, 'Monday'),
+(20240102, '2024-01-02', 2024, 1, 1, 'January', 1, 'Tuesday'),
+(20240103, '2024-01-03', 2024, 1, 1, 'January', 1, 'Wednesday');
+
+INSERT INTO FactSales VALUES
+(1, 1, 1, 20240101, 2, 999.99, 0.1, 1799.98),
+(2, 2, 2, 20240102, 1, 699.99, 0.0, 699.99),
+(3, 3, 3, 20240103, 3, 199.99, 0.15, 509.97);
+
+----------------------------------------------------------------
+-- Example OLAP Queries
+
+-- 1. Sales by Product Category and Region
+SELECT 
+    p.Category,
+    c.Region,
+    SUM(f.SalesAmount) as TotalSales,
+    COUNT(*) as NumberOfTransactions,
+    AVG(f.Quantity) as AvgQuantity
+FROM FactSales f
+JOIN DimProduct p ON f.ProductKey = p.ProductKey
+JOIN DimCustomer c ON f.CustomerKey = c.CustomerKey
+GROUP BY p.Category, c.Region
+WITH ROLLUP;
+
+-- 2. Time-based Analysis
+SELECT 
+    d.Year,
+    d.Quarter,
+    d.MonthName,
+    SUM(f.SalesAmount) as TotalSales,
+    SUM(f.Quantity) as TotalQuantity
+FROM FactSales f
+JOIN DimDate d ON f.DateKey = d.DateKey
+GROUP BY d.Year, d.Quarter, d.MonthName
+WITH CUBE;
+
+-- 3. Product Performance by Customer Geography
+SELECT 
+    p.Category,
+    p.SubCategory,
+    c.Country,
+    c.Region,
+    SUM(f.SalesAmount) as TotalSales,
+    AVG(f.Discount) as AvgDiscount
+FROM FactSales f
+JOIN DimProduct p ON f.ProductKey = p.ProductKey
+JOIN DimCustomer c ON f.CustomerKey = c.CustomerKey
+GROUP BY p.Category, p.SubCategory, c.Country, c.Region
+WITH CUBE;
+
+----------------------------------------------------------------
+note the "WITH ROLLUP;" and "WITH CUBE;" at the end of queries.
+
+WITH ROLLUP:
+ - Creates hierarchical subtotals from left to right
+ - Good for hierarchical data (like Region -> Country -> City)
+ - Generates n+1 grouping combinations (where n is number of columns)
+
+Example:
+
+SELECT Region, Country, SUM(Sales) as TotalSales
+FROM Sales GROUP BY Region, Country WITH ROLLUP;
+
+Output:
+Region    Country    TotalSales
+East      USA        1000
+East      Canada     800
+East      NULL       1800    -- Subtotal for East
+West      USA        900
+West      Mexico     700
+West      NULL       1600    -- Subtotal for West
+NULL      NULL       3400    -- Grand Total
+
+
+WITH CUBE:
+ - Creates all possible combinations of groupings
+ - Good when all combinations are meaningful
+ - Generates 2^n combinations (where n is number of columns)
+
+Example:
+
+SELECT Region, Country, SUM(Sales) as TotalSales
+FROM Sales GROUP BY Region, Country WITH CUBE;
+
+Output:
+
+Region    Country    TotalSales
+East      USA        1000
+East      Canada     800
+East      NULL       1800    -- Subtotal for East
+West      USA        900
+West      Mexico     700
+West      NULL       1600    -- Subtotal for West
+NULL      USA        1900    -- Subtotal for USA
+NULL      Canada     800     -- Subtotal for Canada
+NULL      Mexico     700     -- Subtotal for Mexico
+NULL      NULL       3400    -- Grand Total
+
+Most of databases have support for rollup and cube,
+but sometimes the syntax is a bit different.
+For example for PostgreSQL:
+
+-- Supports both syntaxes since version 9.5
+
+SELECT Region, Country, SUM(Sales)
+FROM Sales
+GROUP BY ROLLUP(Region, Country);
+
+-- or
+GROUP BY CUBE(Region, Country);
+----------------------------------------------------------------
+Here is how to do CUBE using just standard SQL without CUBE support:
+
+-- Using UNION ALL to simulate CUBE
+SELECT Region, Country, SUM(Sales) FROM Sales GROUP BY Region, Country
+UNION ALL
+SELECT Region, NULL,    SUM(Sales) FROM Sales GROUP BY Region
+UNION ALL
+SELECT NULL, Country,   SUM(Sales) FROM Sales GROUP BY Country
+UNION ALL
+SELECT NULL, NULL,      SUM(Sales) FROM Sales;
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+The star schema allows to calculate the CUBE and ROLLUP values. 
+These pre-calculated aggregations are typically stored in
+separate structures (tables or "Materialized Views").
+Using pre-calculated values makes analytics queries much faster.
+Can store complex calculations that would be expensive to compute on-the-fly
+
+    1. Aggregate Tables Structure:
+        - Separate tables store pre-calculated results
+        - Multiple levels of aggregation (daily, monthly, quarterly)
+        - Each table includes a timestamp for when it was last updated
+
+    2. Refresh (recalculation): typically at night, incremental or full,
+       may have different schedule for different aggregation levels
+
+    3. Query Strategy:
+    - Queries first check if pre-calculated data exists
+    - Falls back to calculating from base tables if needed
+    - Often includes date range logic to use appropriate aggregation level
+
+---------------------------------------
+-- Base fact table (from previous example)
+
+CREATE TABLE FactSales (
+    SalesKey INT PRIMARY KEY,
+    ProductKey INT,
+    CustomerKey INT,
+    DateKey INT,
+    Quantity INT,
+    UnitPrice DECIMAL(10,2),
+    Discount DECIMAL(4,2),
+    SalesAmount DECIMAL(10,2)
+);
+
+---------------------------------------
+-- Aggregate table by Product Category and Region (daily)
+CREATE TABLE AggSalesByCategoryRegionDay (
+    DateKey INT,
+    ProductCategory VARCHAR(30),
+    CustomerRegion VARCHAR(50),
+    TotalSales DECIMAL(15,2),
+    TotalQuantity INT,
+    AvgDiscount DECIMAL(4,2),
+    LastUpdated TIMESTAMP,
+    CONSTRAINT PK_CategoryRegionDay PRIMARY KEY (DateKey, ProductCategory, CustomerRegion)
+);
+
+---------------------------------------
+-- Aggregate table by Product Category and Region (monthly)
+CREATE TABLE AggSalesByCategoryRegionMonth (
+    YearMonth INT,  -- Format: YYYYMM
+    ProductCategory VARCHAR(30),
+    CustomerRegion VARCHAR(50),
+    TotalSales DECIMAL(15,2),
+    TotalQuantity INT,
+    AvgDiscount DECIMAL(4,2),
+    LastUpdated TIMESTAMP,
+    CONSTRAINT PK_CategoryRegionMonth PRIMARY KEY (YearMonth, ProductCategory, CustomerRegion)
+);
+
+---------------------------------------
+-- Daily refresh procedure for Category-Region aggregates
+CREATE PROCEDURE RefreshDailyCategoryRegionAggs
+AS
+BEGIN
+    -- Delete today's aggregates
+    DELETE FROM AggSalesByCategoryRegionDay
+    WHERE DateKey = CONVERT(INT, FORMAT(GETDATE(), 'yyyyMMdd'));
+
+    -- Insert fresh calculations
+    INSERT INTO AggSalesByCategoryRegionDay
+    SELECT 
+        f.DateKey,
+        p.Category as ProductCategory,
+        c.Region as CustomerRegion,
+        SUM(f.SalesAmount) as TotalSales,
+        SUM(f.Quantity) as TotalQuantity,
+        AVG(f.Discount) as AvgDiscount,
+        GETDATE() as LastUpdated
+    FROM FactSales f
+    JOIN DimProduct p ON f.ProductKey = p.ProductKey
+    JOIN DimCustomer c ON f.CustomerKey = c.CustomerKey
+    WHERE f.DateKey = CONVERT(INT, FORMAT(GETDATE(), 'yyyyMMdd'))
+    GROUP BY f.DateKey, p.Category, c.Region;
+END;
+
+---------------------------------------
+-- Monthly refresh procedure for Category-Region aggregates
+CREATE PROCEDURE RefreshMonthlyCategoryRegionAggs
+AS
+BEGIN
+    DECLARE @CurrentYearMonth INT = 
+        CONVERT(INT, FORMAT(GETDATE(), 'yyyyMM'));
+
+    -- Delete current month's aggregates
+    DELETE FROM AggSalesByCategoryRegionMonth
+    WHERE YearMonth = @CurrentYearMonth;
+
+    -- Insert fresh calculations
+    INSERT INTO AggSalesByCategoryRegionMonth
+    SELECT 
+        CONVERT(INT, FORMAT(d.FullDate, 'yyyyMM')) as YearMonth,
+        p.Category as ProductCategory,
+        c.Region as CustomerRegion,
+        SUM(f.SalesAmount) as TotalSales,
+        SUM(f.Quantity) as TotalQuantity,
+        AVG(f.Discount) as AvgDiscount,
+        GETDATE() as LastUpdated
+    FROM FactSales f
+    JOIN DimProduct p ON f.ProductKey = p.ProductKey
+    JOIN DimCustomer c ON f.CustomerKey = c.CustomerKey
+    JOIN DimDate d ON f.DateKey = d.DateKey
+    WHERE CONVERT(INT, FORMAT(d.FullDate, 'yyyyMM')) = @CurrentYearMonth
+    GROUP BY 
+        CONVERT(INT, FORMAT(d.FullDate, 'yyyyMM')),
+        p.Category,
+        c.Region;
+END;
+
+---------------------------------------
+-- Example query using pre-calculated aggregates
+CREATE PROCEDURE GetSalesByRegionCategory
+    @StartDate INT,
+    @EndDate INT
+AS
+BEGIN
+    -- Check if date range spans multiple months
+    IF SUBSTRING(CAST(@StartDate AS VARCHAR), 1, 6) = 
+       SUBSTRING(CAST(@EndDate AS VARCHAR), 1, 6)
+    BEGIN
+        -- Use daily aggregates for single month queries
+        SELECT 
+            ProductCategory,
+            CustomerRegion,
+            SUM(TotalSales) as TotalSales,
+            SUM(TotalQuantity) as TotalQuantity,
+            AVG(AvgDiscount) as AvgDiscount
+        FROM AggSalesByCategoryRegionDay
+        WHERE DateKey BETWEEN @StartDate AND @EndDate
+        GROUP BY ProductCategory, CustomerRegion;
+    END
+    ELSE
+    BEGIN
+        -- Use monthly aggregates for multi-month queries
+        SELECT 
+            ProductCategory,
+            CustomerRegion,
+            SUM(TotalSales) as TotalSales,
+            SUM(TotalQuantity) as TotalQuantity,
+            AVG(AvgDiscount) as AvgDiscount
+        FROM AggSalesByCategoryRegionMonth
+        WHERE YearMonth BETWEEN 
+            SUBSTRING(CAST(@StartDate AS VARCHAR), 1, 6) AND 
+            SUBSTRING(CAST(@EndDate AS VARCHAR), 1, 6)
+        GROUP BY ProductCategory, CustomerRegion;
+    END
+END;
+
+---------------------------------------
+---------------------------------------
