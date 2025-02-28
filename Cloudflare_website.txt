@@ -57,3 +57,65 @@ But CNAME doesn't work - so I have to make a redirect rule
 ======================================================
 Problems - search https://community.cloudflare.com
 ======================================================
+
+Setting Up a Redirect from Your Custom Domain to Zoom
+
+Here's how to set up a redirect from your Cloudflare 
+domain to your personal Zoom link:
+
+    Log in to your Cloudflare account at dash.cloudflare.com
+
+    Select your domain from the Cloudflare dashboard
+
+    Verify that two DNS records are set:
+    A record - created automatically to point domain to CloudFlare proxy
+    CNAME record - to point www.yourdomain.com to yourdomain.com
+      TYPE     Name             Content
+      A        meetlev.com      104.236.3.83    # created automatically 
+      CNAME    www              meetlev.com     # created manually
+
+    Navigate to Rules:
+        Click on "Rules" in the left sidebar
+        Select "Page Rules" (or in newer interfaces, 
+                go to "Rules" then "Redirect Rules")
+
+    Create a new redirect rule:
+        Click "Create Page Rule" or "Create Redirect Rule"
+        In the URL pattern field, enter your domain pattern to match:
+            For redirecting the root domain: yourdomain.com/*
+            For a specific subdomain: meetings.yourdomain.com/*
+
+    Set up the redirect:
+        Select "Forwarding URL" as the setting (or "Redirect" in newer interfaces)
+        Choose "301 Permanent Redirect" or "302 Temporary Redirect" (301 is better for SEO if this is a permanent setup)
+        Enter your personal Zoom meeting URL in the destination field:
+            Example: https://zoom.us/j/123456789
+
+    Save and Deploy:
+        Click "Save and Deploy" or "Deploy" to activate the rule
+
+    Test the redirect by visiting your custom domain in a browser
+
+This setup will redirect anyone who visits your domain 
+directly to your personal Zoom meeting link.
+
+======================================================
+In my account, I select my domain MeetLev.com.
+See the "Rules" on the left, open it, click on Overview.
+In the right pane I see one active rule called "redirect to zoom"
+When I click on it - I can see/change the details:
+
+Rule Name: redirect to zoom
+
+If incoming requests match:  All incoming requests
+
+Then
+URL redirect
+
+Type: Static
+URL: https://us02web.zoom.us/j/4979450088?pwd=ZmVEMkt4RDMrZW84RVMvYmZDSDI0QT09
+Status code: 301
+
+Place at
+Select order: First
+======================================================

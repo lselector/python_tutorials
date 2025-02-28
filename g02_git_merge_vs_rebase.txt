@@ -1,0 +1,76 @@
+Git merge vs rebase
+
+Merging creates a new commit that combines changes from two branches. 
+It preserves the complete chronological history 
+but can make the history more complex with many merge commits. 
+
+Rebasing replays your branch's commits on top of another branch, 
+creating a linear history (rewriting chronology of commit history)
+
+# Merging starting from feature branch
+git checkout main
+git merge feature
+
+# rebasing starting from feature branch
+git rebase main
+
+Merge is safer for public/shared branches since it doesn't change history
+
+Rebase is better for local branches to maintain clean history before sharing
+
+Warning: never rebase branches that others are working on
+When in doubt, merge is the safer option
+
+If there are multiple commits on a feature branch,
+you can squash them all together into one commit when merging like this:
+
+# While on main branch
+git merge --squash feature
+git commit -m "Combined all feature commits"
+
+# -----------------------------------------------------------------
+If I am on a feature branch where I have some uncommitted changes 
+and I do "git checkout main", what will happen? 
+Will I lose uncommitted changes?
+
+If your uncommitted changes don't conflict with files in the main branch,
+then Git will carry over your uncommitted changes to the main branch
+You won't lose any work
+
+This is called "carrying over" or "bringing changes along"
+
+If your uncommitted changes would conflict with files in main,
+Git will block the checkout and show an error message
+
+Your changes will be preserved on your current branch
+You'll see a message like "error: Your local changes would 
+be overwritten by checkout"
+
+To safely handle uncommitted changes, you can :
+
+# -----------------------------------------------------
+# Option 1: Stash your changes
+git stash
+git checkout main
+
+# Later, to get changes back:
+git stash pop
+
+# -----------------------------------------------------
+# Option 2: Commit your changes before switching the branch
+git commit -m "WIP: temporary commit"
+git checkout main
+
+# -----------------------------------------------------
+# Option 3: Create a temporary commit and then amend it later
+git commit -m "WIP"
+git checkout main
+# Later, to continue working:
+git checkout feature
+git add .
+git commit --amend
+
+The safest approach is usually to either commit your changes 
+or stash them before switching branches. 
+This way, you have a clear record of your work and can easily recover it.
+
