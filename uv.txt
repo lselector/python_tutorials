@@ -22,7 +22,7 @@ brew install uv
 which uv
 
 # -------------------------------------
-# in fish shell
+# create virtual environment - and activate it
 
 uv venv --python=(which python3.13)
 source .venv/bin/activate.fish
@@ -53,7 +53,10 @@ converting requirements.txt to pyproject.toml and back
 
 # method 1
 uv init --bare # create minimal pyproject.toml
+uv add pandas               # add a module
 uv add -r requirements.txt  # add from requirements.txt into pyproject.toml
+uv remove pandas
+uv add --upgrade pandas
 
 # method 2
 uvx migrate-to-uv 
@@ -110,3 +113,6 @@ uv add --script example.py requests rich
 #!/usr/bin/env -S uv run --script
 
 # -------------------------------------
+build and publish distributions using "uv build" and "uv publish"
+# -------------------------------------
+
