@@ -88,6 +88,55 @@ dependencies = [
 uv pip compile pyproject.toml -o requirements.txt
 
 # -------------------------------------
+"uv sync" - used very often. 
+
+It reads pyproject.toml file (error if file not available)
+and uses it as a recipe to install/remove/upgrade 
+packages in virtual environment (under .venv).
+
+Note - if virtual environment doesn't exist - it will create it
+
+Example of usage:
+
+Example 1:
+    git clone <repository>
+    cd <project>
+    uv sync  # creates .venv and puts all modules under it
+
+Example 2:
+    # After editing pyproject.toml 
+    # or pulling changes that modify dependencies
+    # or when environment gets corrupted or out of sync
+    uv sync
+
+Common options:
+    uv sync --dev          # Include development dependencies
+    uv sync --no-dev       # Exclude development dependencies
+    uv sync --frozen       # Don't update the lock file, just sync to it
+    uv sync --upgrade      # Allow upgrading dependencies to newer versions
+    uv sync --group test   # Include optional dependency groups
+    uv sync --all-groups   # Include all optional groups
+
+uv sync  is similar to "npm install" or "yarn install"
+
+Note - you can (and should) specify which python version to use.
+you can do it in command line:
+    uv sync --python 3.11
+    uv sync --python 3.12.0
+    uv sync --python python3.11
+    uv sync --python /usr/bin/python3.11
+
+or you can do it inside pyproject.toml file:
+    [project]
+    requires-python = ">=3.11"
+
+    [tool.uv]
+    python = "3.11"
+
+To show python version in your environment:
+    uv run python --version 
+
+# -------------------------------------
 # you can use "uv" to run scripts:
 uv run script.py
 uv run --with requests --with rich script.py
@@ -115,4 +164,3 @@ uv add --script example.py requests rich
 # -------------------------------------
 build and publish distributions using "uv build" and "uv publish"
 # -------------------------------------
-
