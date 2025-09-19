@@ -1,0 +1,93 @@
+Working with windmill.dev
+
+# -------------------------------------------------------------
+install latest node
+brew install node  # version v24.6.0
+which node         # /usr/local/bin/node
+
+# -------------------------------------------------------------
+npm install -g windmill-cli
+which wmill
+ln -s /usr/local/Cellar/node/24.6.0/bin/wmill /usr/local/bin/wmill
+which wmill
+
+# -------------------------------------------------------------
+which docker
+If no docker - install it and start it
+   https://www.docker.com/products/docker-desktop
+
+# -------------------------------------------------------------
+mkdir ~/windmill
+cd ~/windmill
+
+curl https://raw.githubusercontent.com/windmill-labs/windmill/main/docker-compose.yml -o docker-compose.yml
+
+curl https://raw.githubusercontent.com/windmill-labs/windmill/main/Caddyfile -o Caddyfile
+
+curl https://raw.githubusercontent.com/windmill-labs/windmill/main/.env -o .env
+
+# -------------------------------------------------------------
+Two files:
+ Caddyfile = configuration file for Caddy reverse proxy and web server for your Windmill setup
+ docker-compose.yml = Windmill configuration
+
+---------------------------------------------------------------
+Starting/stopping:
+
+docker compose up -d                # start windmill app
+docker compose down                 # shut it down
+docker compose down -v              # removes all data permanently
+docker compose down --rmi all -v    # removes images as well
+
+docker compose ps    # verify
+docker compose stop  # stop ( but easy to restart)
+docker ps            # view running containers
+
+# -------------------------------------------------------------
+http://localhost/user/login
+Email: admin@windmill.dev
+Password: changeme
+
+# -------------------------------------------------------------
+ - http://localhost/user/workspaces
+   - Click "+ Create a new workspace" button - and create it ("myworkspace")
+     select the AI model - and enter API key
+   - Then click on "User settings"
+     In the user settings, look for a "Tokens" tab 
+     or section where you can create or copy an API token 
+   - connect the CLI:
+     wmill workspace add myworkspace http://localhost mytoken
+
+# -------------------------------------------------------------
+Home
+Runs      - http://localhost/runs
+Variables - http://localhost/variables
+Resources - http://localhost/resources
+Assets    - http://localhost/assets
+# -------------------------------------------------------------
+Triggers  
+  Schedules - http://localhost/schedules
+# -------------------------------------------------------------
+User      - http://localhost/assets#user-settings
+# -------------------------------------------------------------
+Settings
+ - http://localhost/#user-settings
+ - http://localhost/workspace_settings
+ - http://localhost/workspace_settings#superadmin-settings
+ - http://localhost/user/instance_settings
+# -------------------------------------------------------------
+Workers - http://localhost/workers
+    Service Logs, Queue Metrics, Default tags, Custom tags
+    worker groups: default, native, reports
+    separate config for each group
+# -------------------------------------------------------------
+Foleders & Groups
+ - http://localhost/folders - Folders
+ - http://localhost/groups  - Groups
+# -------------------------------------------------------------
+Logs:
+ - http://localhost/audit_logs - Audit logs
+ - http://localhost/service_logs - Service logs
+# -------------------------------------------------------------
++ HTTP, WebSockets, Postgres, EE (Kafka, NATS, SQS, GCP Pub/Sub)
+# -------------------------------------------------------------
